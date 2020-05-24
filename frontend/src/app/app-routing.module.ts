@@ -36,10 +36,10 @@ const routes: Routes = [
       import('./views/patient/patient.module').then((m) => m.PatientModule),
   },
   {
-    path: 'precence-planner',
+    path: 'presence-planner',
     loadChildren: () =>
-      import('./views/precence-planner/precence-planner.module').then(
-        (m) => m.PrecencePlannerModule
+      import('./views/presence-planner/presence-planner.module').then(
+        (m) => m.PresencePlannerModule
       ),
   },
 ];
