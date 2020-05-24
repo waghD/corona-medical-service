@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PresencePlannerService } from './presence-planner.service';
 
 @Component({
   selector: 'app-presence-planner',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./presence-planner.component.css'],
 })
 export class PresencePlannerComponent implements OnInit {
-  constructor() {}
+  constructor(private precenseService: PresencePlannerService) {}
 
   ngOnInit(): void {}
 }
