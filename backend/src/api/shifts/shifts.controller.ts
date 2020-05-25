@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Shift, UpdateShift, CreateShift } from './shift.dto';
-import { Patient } from 'src/patients/patient.dto';
+import { Patient } from 'src/api/patients/patient.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Shifts')
