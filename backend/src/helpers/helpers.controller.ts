@@ -1,39 +1,44 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Body,
   Put,
   Post,
   Delete,
+  Param,
+  NotImplementedException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Helper } from './helper.dto';
+import { Helper, UpdateHelper, CreateHelper } from './helper.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Helpers')
+@UsePipes(ValidationPipe)
 @Controller('helpers')
 export class HelpersController {
   @Get()
   getAll(): Helper[] {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+    throw new NotImplementedException();
   }
 
   @Get(':id')
-  get(@Body('id') id: number): Helper {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  get(@Param('id') id: number): Helper {
+    throw new NotImplementedException();
   }
 
   @Put()
-  create(@Body() cleaner: Helper): Helper {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  create(@Body() cleaner: CreateHelper): Helper {
+    throw new NotImplementedException();
   }
 
   @Post(':id')
-  update(@Body('id') id: number): Helper {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  update(@Param('id') id: number, @Body() helper: UpdateHelper): Helper {
+    throw new NotImplementedException();
   }
 
   @Delete(':id')
-  delete(@Body('id') id: number): Helper {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  delete(@Param('id') id: number): Helper {
+    throw new NotImplementedException();
   }
 }

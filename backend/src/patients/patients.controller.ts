@@ -1,39 +1,44 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Body,
   Put,
   Post,
   Delete,
+  Param,
+  NotImplementedException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Patient } from './patient.dto';
+import { Patient, UpdatePatient, CreatePatient } from './patient.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Patients')
+@UsePipes(ValidationPipe)
 @Controller('patients')
 export class PatientsController {
   @Get()
   getAll(): Patient[] {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+    throw new NotImplementedException();
   }
 
   @Get(':id')
-  get(@Body('id') id: number): Patient {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  get(@Param('id') id: number): Patient {
+    throw new NotImplementedException();
   }
 
   @Put()
-  create(@Body() cleaner: Patient): Patient {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  create(@Body() cleaner: CreatePatient): Patient {
+    throw new NotImplementedException();
   }
 
   @Post(':id')
-  update(@Body('id') id: number): Patient {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  update(@Param('id') id: number, @Body() patient: UpdatePatient): Patient {
+    throw new NotImplementedException();
   }
 
   @Delete(':id')
-  delete(@Body('id') id: number): Patient {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  delete(@Param('id') id: number): Patient {
+    throw new NotImplementedException();
   }
 }

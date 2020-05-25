@@ -1,40 +1,45 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Body,
   Put,
   Post,
   Delete,
+  Param,
+  NotImplementedException,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Shift } from './shift.dto';
+import { Shift, UpdateShift, CreateShift } from './shift.dto';
 import { Patient } from 'src/patients/patient.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Shifts')
+@UsePipes(ValidationPipe)
 @Controller('shifts')
 export class ShiftsController {
   @Get()
   getAll(): Shift[] {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+    throw new NotImplementedException();
   }
 
   @Get(':id')
-  get(@Body('id') id: number): Shift {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  get(@Param('id') id: number): Shift {
+    throw new NotImplementedException();
   }
 
   @Put()
-  create(@Body() cleaner: Patient): Shift {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  create(@Body() cleaner: CreateShift): Shift {
+    throw new NotImplementedException();
   }
 
   @Post(':id')
-  update(@Body('id') id: number): Shift {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  update(@Param('id') id: number, @Body() shift: UpdateShift): Shift {
+    throw new NotImplementedException();
   }
 
   @Delete(':id')
-  delete(@Body('id') id: number): Shift {
-    throw new HttpException('Not yet Implemented', HttpStatus.NOT_IMPLEMENTED);
+  delete(@Param('id') id: number): Shift {
+    throw new NotImplementedException();
   }
 }

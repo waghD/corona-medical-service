@@ -4,4 +4,8 @@ import { ApiConnectionService } from 'src/app/shared/services/api-connection.ser
 @Injectable()
 export class HomeService {
   constructor(private apiConnection: ApiConnectionService) {}
+
+  getDoctors() {
+    return this.apiConnection.getDoctors();
+  }
 }
