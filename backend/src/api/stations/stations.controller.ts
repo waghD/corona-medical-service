@@ -9,37 +9,74 @@ import {
   Param,
   UsePipes,
   ValidationPipe,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Station, UpdateStation, CreateStation } from './station.dto';
-import { Patient } from 'src/api/patients/patient.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { StationsService } from './stations.service';
+import { DatabaseService } from 'src/database/database.service';
 
 @ApiTags('Stations')
 @UsePipes(ValidationPipe)
 @Controller('stations')
 export class StationsController {
+  constructor(private service: StationsService, private db: DatabaseService) {}
+
   @Get()
-  getAll(): Station[] {
-    throw new NotImplementedException();
+  async getAll(): Promise<Station[]> {
+    try {
+      const stations = await this.db.getStations();
+      return stations;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Get(':id')
-  get(@Param('id') id: number): Station {
-    throw new NotImplementedException();
+  async get(@Param('id') id: number): Promise<Station> {
+    try {
+      const station = await this.db.getStationById(id);
+      return station;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Put()
-  create(@Body() cleaner: CreateStation): Station {
-    throw new NotImplementedException();
+  async create(@Body() createStation: CreateStation): Promise<Station> {
+    try {
+      const station = await this.service.createStation(createStation);
+      return station;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Post(':id')
-  update(@Param('id') id: number, @Body() station: UpdateStation): Station {
-    throw new NotImplementedException();
+  async update(
+    @Param('id') id: number,
+    @Body() updateStation: UpdateStation,
+  ): Promise<Station> {
+    try {
+      const station = await this.service.updateStation(id, updateStation);
+      return station;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): Station {
-    throw new NotImplementedException();
+  async delete(@Param('id') id: number): Promise<Station> {
+    try {
+      const station = await this.service.deleteStation(id);
+      return station;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 }

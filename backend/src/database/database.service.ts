@@ -101,7 +101,7 @@ export class DatabaseService {
     return this.stationRepo.findOne(id);
   }
 
-  public saveStaion(station: Station): Promise<Station> {
+  public saveStation(station: Station): Promise<Station> {
     return this.stationRepo.save(station);
   }
 
