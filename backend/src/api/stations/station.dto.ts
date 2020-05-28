@@ -1,8 +1,6 @@
-import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 import { PartialType, OmitType } from '@nestjs/swagger';
-import { Patient, UpdatePatient } from '../patients/patient.dto';
-import { OneToMany, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { Shift } from '../shifts/shift.dto';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Station {
