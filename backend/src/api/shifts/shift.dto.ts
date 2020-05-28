@@ -4,7 +4,13 @@ import { Cleaner, UpdateCleaner } from '../cleaners/cleaner.dto';
 import { Station, UpdateStation } from '../stations/station.dto';
 import { IsInt, IsDateString, ValidateNested } from 'class-validator';
 import { OmitType } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Shift {
@@ -21,31 +27,23 @@ export class Shift {
   to: Date;
 
   @ValidateNested()
-  @ManyToOne(
-    type => Doctor,
-    doctor => doctor.shifts,
-  )
+  @ManyToOne(type => Doctor)
+  @JoinColumn()
   doc: Doctor;
 
   @ValidateNested()
-  @ManyToOne(
-    type => Helper,
-    helper => helper.shifts,
-  )
+  @ManyToOne(type => Helper)
+  @JoinColumn()
   helper: Helper;
 
   @ValidateNested()
-  @ManyToOne(
-    type => Cleaner,
-    cleaner => cleaner.shifts,
-  )
+  @ManyToOne(type => Cleaner)
+  @JoinColumn()
   cleaner: Cleaner;
 
   @ValidateNested()
-  @ManyToOne(
-    type => Station,
-    type => type.shifts,
-  )
+  @ManyToOne(type => Station)
+  @JoinColumn()
   station: Station;
 }
 

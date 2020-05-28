@@ -7,6 +7,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -24,10 +25,8 @@ export class Patient {
   surname: string;
 
   @ValidateNested()
-  @ManyToOne(
-    type => Station,
-    station => station.patients,
-  )
+  @ManyToOne(type => Station)
+  @JoinColumn()
   station: Station;
 }
 

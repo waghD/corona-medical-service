@@ -17,13 +17,6 @@ export class Helper {
   @IsString()
   @Column()
   surname: string;
-
-  @ValidateNested()
-  @OneToMany(
-    type => Shift,
-    shift => shift.helper,
-  )
-  shifts: Shift[];
 }
 
 export class UpdateHelper extends PartialType(Helper) {}

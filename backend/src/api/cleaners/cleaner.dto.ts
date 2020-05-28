@@ -17,13 +17,6 @@ export class Cleaner {
   @IsString()
   @Column()
   surname: string;
-
-  @ValidateNested()
-  @OneToMany(
-    type => Shift,
-    shift => shift.cleaner,
-  )
-  shifts: Shift[];
 }
 
 export class UpdateCleaner extends PartialType(Cleaner) {}

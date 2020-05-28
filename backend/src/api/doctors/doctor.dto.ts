@@ -1,7 +1,6 @@
-import { IsInt, IsString, ValidateNested } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Shift } from '../shifts/shift.dto';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Doctor {
@@ -21,13 +20,6 @@ export class Doctor {
   @IsString()
   @Column()
   profession: string;
-
-  @ValidateNested()
-  @OneToMany(
-    type => Shift,
-    shift => shift.doc,
-  )
-  shifts: Shift[];
 }
 
 export class UpdateDoctor extends PartialType(Doctor) {}

@@ -7,6 +7,14 @@ import { Helper } from 'src/api/helpers/helper.dto';
 import { Patient } from 'src/api/patients/patient.dto';
 import { Shift } from 'src/api/shifts/shift.dto';
 import { Station } from 'src/api/stations/station.dto';
+import {
+  generateDoctors,
+  generateHelpers,
+  generateCleaners,
+  generateShifts,
+  generateStations,
+  generatePatients,
+} from './initial-data';
 
 @Injectable()
 export class DatabaseService {
@@ -18,12 +26,18 @@ export class DatabaseService {
     @InjectRepository(Shift) private shiftRepo: Repository<Shift>,
     @InjectRepository(Station) private stationRepo: Repository<Station>,
   ) {
-    this.cleanerRepo.find().then(data => console.log('cleaner: ', data));
-    this.doctorRepo.find().then(data => console.log('doctor: ', data));
-    this.helperRepo.find().then(data => console.log('helper: ', data));
-    this.patientRepo.find().then(data => console.log('patient: ', data));
-    this.shiftRepo.find().then(data => console.log('shift: ', data));
-    this.stationRepo.find().then(data => console.log('station: ', data));
+    this.initDatabase().then(() => console.log('Database initialized'));
+  }
+
+  private async initDatabase() {
+    const doctors = await this.doctorRepo.save(generateDoctors());
+    const helpers = await this.helperRepo.save(generateHelpers());
+    const cleaners = await this.cleanerRepo.save(generateCleaners());
+    const stations = await this.stationRepo.save(generateStations());
+    await this.patientRepo.save(generatePatients(stations));
+    await this.shiftRepo.save(
+      generateShifts(doctors, helpers, cleaners, stations),
+    );
   }
 
   getDoctors() {}

@@ -13,25 +13,7 @@ export class Station {
   @IsString()
   @Column()
   station: string;
-
-  @ValidateNested()
-  @OneToMany(
-    type => Patient,
-    patient => patient.station,
-  )
-  patients: Patient[];
-
-  @ValidateNested()
-  @OneToMany(
-    type => Shift,
-    shift => shift.station,
-  )
-  shifts: Shift[];
 }
 
-export class UpdateStation extends PartialType(
-  OmitType(Station, ['patients']),
-) {
-  patients?: UpdatePatient[];
-}
+export class UpdateStation extends PartialType(Station) {}
 export class CreateStation extends OmitType(Station, ['id']) {}
