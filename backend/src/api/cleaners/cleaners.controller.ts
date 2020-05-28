@@ -6,7 +6,6 @@ import {
   Post,
   Delete,
   Param,
-  NotImplementedException,
   UsePipes,
   ValidationPipe,
   InternalServerErrorException,
