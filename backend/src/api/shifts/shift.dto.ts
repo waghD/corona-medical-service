@@ -3,7 +3,7 @@ import { Helper, UpdateHelper } from '../helpers/helper.dto';
 import { Cleaner, UpdateCleaner } from '../cleaners/cleaner.dto';
 import { Station, UpdateStation } from '../stations/station.dto';
 import { IsInt, IsDateString, ValidateNested } from 'class-validator';
-import { OmitType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -47,26 +47,37 @@ export class Shift {
   station: Station;
 }
 
-export class UpdateShift {
+export class UpdateShift extends PartialType(
+  OmitType(Shift, ['doc', 'helper', 'cleaner', 'station']),
+) {
   @IsInt()
-  id?: number;
+  doc?: number;
 
-  @IsDateString()
-  from?: string;
+  @IsInt()
+  helper?: number;
 
-  @IsDateString()
-  to?: string;
+  @IsInt()
+  cleaner?: number;
 
-  @ValidateNested()
-  doc?: UpdateDoctor;
-
-  @ValidateNested()
-  helper?: UpdateHelper;
-
-  @ValidateNested()
-  cleaner?: UpdateCleaner;
-
-  @ValidateNested()
-  station?: UpdateStation;
+  @IsInt()
+  station?: number;
 }
-export class CreateShift extends OmitType(Shift, ['id']) {}
+export class CreateShift extends OmitType(Shift, [
+  'id',
+  'doc',
+  'helper',
+  'cleaner',
+  'station',
+]) {
+  @IsInt()
+  doc: number;
+
+  @IsInt()
+  helper: number;
+
+  @IsInt()
+  cleaner: number;
+
+  @IsInt()
+  station: number;
+}

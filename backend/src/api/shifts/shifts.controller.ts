@@ -9,37 +9,74 @@ import {
   NotImplementedException,
   UsePipes,
   ValidationPipe,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Shift, UpdateShift, CreateShift } from './shift.dto';
-import { Patient } from 'src/api/patients/patient.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ShiftsService } from './shifts.service';
+import { DatabaseService } from 'src/database/database.service';
 
 @ApiTags('Shifts')
 @UsePipes(ValidationPipe)
 @Controller('shifts')
 export class ShiftsController {
+  constructor(private service: ShiftsService, private db: DatabaseService) {}
+
   @Get()
-  getAll(): Shift[] {
-    throw new NotImplementedException();
+  async getAll(): Promise<Shift[]> {
+    try {
+      const shifts = await this.db.getShifts();
+      return shifts;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Get(':id')
-  get(@Param('id') id: number): Shift {
-    throw new NotImplementedException();
+  async get(@Param('id') id: number): Promise<Shift> {
+    try {
+      const shift = await this.db.getShiftById(id);
+      return shift;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Put()
-  create(@Body() cleaner: CreateShift): Shift {
-    throw new NotImplementedException();
+  async create(@Body() createShift: CreateShift): Promise<Shift> {
+    try {
+      const shift = await this.service.createShift(createShift);
+      return shift;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Post(':id')
-  update(@Param('id') id: number, @Body() shift: UpdateShift): Shift {
-    throw new NotImplementedException();
+  async update(
+    @Param('id') id: number,
+    @Body() updateShift: UpdateShift,
+  ): Promise<Shift> {
+    try {
+      const shift = await this.service.updateShift(id, updateShift);
+      return shift;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number): Shift {
-    throw new NotImplementedException();
+  async delete(@Param('id') id: number): Promise<Shift> {
+    try {
+      const shift = await this.service.deleteShift(id);
+      return shift;
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException();
+    }
   }
 }
