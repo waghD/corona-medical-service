@@ -1,6 +1,6 @@
-import { Station, UpdateStation } from '../stations/station.dto';
+import { Station, UpdateStation, CreateStation } from '../stations/station.dto';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
-import { OmitType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -30,17 +30,11 @@ export class Patient {
   station: Station;
 }
 
-export class UpdatePatient {
+export class UpdatePatient extends PartialType(OmitType(Patient, ['station'])) {
   @IsInt()
-  id?: number;
-
-  @IsString()
-  name?: string;
-
-  @IsString()
-  surname?: string;
-
-  @ValidateNested()
-  station?: UpdateStation;
+  station?: number;
 }
-export class CreatePatient extends OmitType(Patient, ['id']) {}
+export class CreatePatient extends OmitType(Patient, ['id', 'station']) {
+  @IsInt()
+  station: number;
+}
