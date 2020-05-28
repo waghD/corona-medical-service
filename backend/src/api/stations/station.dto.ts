@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsString, IsOptional } from 'class-validator';
 import { PartialType, OmitType } from '@nestjs/swagger';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
@@ -13,5 +13,13 @@ export class Station {
   station: string;
 }
 
-export class UpdateStation extends PartialType(Station) {}
+export class UpdateStation {
+  @IsOptional()
+  @IsInt()
+  id?: number;
+
+  @IsOptional()
+  @IsString()
+  station?: string;
+}
 export class CreateStation extends OmitType(Station, ['id']) {}

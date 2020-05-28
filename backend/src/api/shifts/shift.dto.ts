@@ -2,7 +2,12 @@ import { Doctor } from '../doctors/doctor.dto';
 import { Helper } from '../helpers/helper.dto';
 import { Cleaner } from '../cleaners/cleaner.dto';
 import { Station } from '../stations/station.dto';
-import { IsInt, IsDateString, ValidateNested } from 'class-validator';
+import {
+  IsInt,
+  IsDateString,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import {
   Entity,
@@ -47,18 +52,32 @@ export class Shift {
   station: Station;
 }
 
-export class UpdateShift extends PartialType(
-  OmitType(Shift, ['doc', 'helper', 'cleaner', 'station']),
-) {
+export class UpdateShift {
+  @IsOptional()
+  @IsInt()
+  id?: number;
+
+  @IsOptional()
+  @IsDateString()
+  from?: Date;
+
+  @IsOptional()
+  @IsDateString()
+  to?: Date;
+
+  @IsOptional()
   @IsInt()
   doc?: number;
 
+  @IsOptional()
   @IsInt()
   helper?: number;
 
+  @IsOptional()
   @IsInt()
   cleaner?: number;
 
+  @IsOptional()
   @IsInt()
   station?: number;
 }

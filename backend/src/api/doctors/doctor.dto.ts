@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsString, IsOptional } from 'class-validator';
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
@@ -22,5 +22,21 @@ export class Doctor {
   profession: string;
 }
 
-export class UpdateDoctor extends PartialType(Doctor) {}
+export class UpdateDoctor {
+  @IsOptional()
+  @IsInt()
+  id?: number;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  surname?: string;
+
+  @IsOptional()
+  @IsString()
+  profession?: string;
+}
 export class CreateDoctor extends OmitType(Doctor, ['id']) {}
