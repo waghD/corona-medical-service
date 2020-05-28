@@ -1,11 +1,10 @@
-import { Station, UpdateStation, CreateStation } from '../stations/station.dto';
+import { Station } from '../stations/station.dto';
 import { IsInt, IsString, ValidateNested } from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';

@@ -1,7 +1,7 @@
-import { Doctor, UpdateDoctor } from '../doctors/doctor.dto';
-import { Helper, UpdateHelper } from '../helpers/helper.dto';
-import { Cleaner, UpdateCleaner } from '../cleaners/cleaner.dto';
-import { Station, UpdateStation } from '../stations/station.dto';
+import { Doctor } from '../doctors/doctor.dto';
+import { Helper } from '../helpers/helper.dto';
+import { Cleaner } from '../cleaners/cleaner.dto';
+import { Station } from '../stations/station.dto';
 import { IsInt, IsDateString, ValidateNested } from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import {

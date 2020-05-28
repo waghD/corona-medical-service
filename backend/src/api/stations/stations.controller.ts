@@ -5,7 +5,6 @@ import {
   Put,
   Post,
   Delete,
-  NotImplementedException,
   Param,
   UsePipes,
   ValidationPipe,
