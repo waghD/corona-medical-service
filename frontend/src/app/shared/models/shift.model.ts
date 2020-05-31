@@ -8,67 +8,85 @@ export interface ShiftDto {
   id: number;
   from: string;
   to: string;
-  doc: DoctorDto;
-  helper: HelperDto;
-  cleaner: CleanerDto;
-  station: StationDto;
+  doc?: DoctorDto;
+  helper?: HelperDto;
+  cleaner?: CleanerDto;
+  station?: StationDto;
+}
+
+export interface ShiftUploadDto {
+  id: number;
+  from: string;
+  to: string;
+  doc?: number;
+  helper?: number;
+  cleaner?: number;
+  station?: number;
 }
 
 export class Shift {
   public readonly id: number;
   public from: Date;
   public to: Date;
-  public doc: Doctor;
-  public helper: Helper;
-  public cleaner: Cleaner;
-  public station: Station;
+  public doc?: Doctor;
+  public helper?: Helper;
+  public cleaner?: Cleaner;
+  public station?: Station;
 
   constructor(dto: ShiftDto) {
     this.id = dto.id;
     this.from = new Date(dto.from);
     this.to = new Date(dto.to);
-    this.doc = new Doctor(dto.doc);
-    this.helper = new Helper(dto.helper);
-    this.cleaner = new Cleaner(dto.cleaner);
-    this.station = new Station(dto.station);
+    if (dto.doc) {
+      this.doc = new Doctor(dto.doc);
+    }
+    if (dto.helper) {
+      this.helper = new Helper(dto.helper);
+    }
+    if (dto.cleaner) {
+      this.cleaner = new Cleaner(dto.cleaner);
+    }
+    if (dto.station) {
+      this.station = new Station(dto.station);
+    }
   }
 
-  toDto(): ShiftDto {
+  toDto(): ShiftUploadDto {
     return {
       id: this.id,
-      from: this.from.toLocaleDateString(),
-      to: this.to.toLocaleDateString(),
-      doc: this.doc.toDto(),
-      helper: this.helper.toDto(),
-      cleaner: this.cleaner.toDto(),
-      station: this.station.toDto(),
+      from: this.from.toISOString(),
+      to: this.to.toISOString(),
+      doc: this.doc.id,
+      helper: this.helper.id,
+      cleaner: this.cleaner.id,
+      station: this.station.id,
     };
   }
 
   static partialToDto(
     partial: RecursivePartial<Shift>
-  ): RecursivePartial<ShiftDto> {
-    const dto: RecursivePartial<ShiftDto> = {};
+  ): RecursivePartial<ShiftUploadDto> {
+    const dto: RecursivePartial<ShiftUploadDto> = {};
     if (partial.id) {
       dto.id = partial.id;
     }
     if (partial.from) {
-      dto.from = (partial.from as Date).toLocaleDateString();
+      dto.from = (partial.from as Date).toISOString();
     }
     if (partial.to) {
-      dto.to = (partial.to as Date).toLocaleDateString();
+      dto.to = (partial.to as Date).toISOString();
     }
-    if (partial.doc) {
-      dto.doc = Doctor.partialToDto(partial.doc);
+    if (partial.doc && partial.doc.id) {
+      dto.doc = partial.doc.id;
     }
-    if (partial.helper) {
-      dto.helper = Helper.partialToDto(partial.helper);
+    if (partial.helper && partial.helper.id) {
+      dto.helper = partial.helper.id;
     }
-    if (partial.cleaner) {
-      dto.cleaner = Cleaner.partialToDto(partial.cleaner);
+    if (partial.cleaner && partial.cleaner.id) {
+      dto.cleaner = partial.cleaner.id;
     }
-    if (partial.station) {
-      dto.station = Station.partialToDto(partial.station);
+    if (partial.station && partial.station.id) {
+      dto.station = partial.station.id;
     }
     return dto;
   }
