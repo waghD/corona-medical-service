@@ -11,7 +11,7 @@ Service Engineering UE4
 
 Commandline in dem Ordner Backend öffnen
  - `npm install`
- - `npm run start`
+ - `npm run start` (Hier muss der MySQL server bereits auf Port 3306 laufen)
  
 Commandline in dem Ordner Frontend öffnen
  - `npm install`
