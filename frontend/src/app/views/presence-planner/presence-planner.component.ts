@@ -9,13 +9,8 @@ import { Shift } from 'src/app/shared/models/shift.model';
   styleUrls: ['./presence-planner.component.css'],
 })
 export class PresencePlannerComponent implements OnInit {
-  displayedColumns = [
-    'doc',
-    'from',
-    'to',
-    'station',
- ];
-  shifts:any = [];
+  displayedColumns = ['doc', 'from', 'to', 'station'];
+  shifts: Shift[] = [];
   shiftsTableDataSource = new MatTableDataSource<Shift>();
 
   constructor(private precenseService: PresencePlannerService) {}
@@ -25,10 +20,10 @@ export class PresencePlannerComponent implements OnInit {
   }
   getShifts() {
     //this.shifts = [];
-    this.precenseService.getShifts().subscribe((data: {}) => {
+    this.precenseService.getShifts().subscribe((data: Shift[]) => {
       console.log(data);
-      this.shifts = data as Shift[];
-      console.log('converted shifts_:', this.shifts)
+      this.shifts = data;
+      console.log('converted shifts_:', this.shifts);
       this.shiftsTableDataSource.data = this.shifts;
     });
   }
