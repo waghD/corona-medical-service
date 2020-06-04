@@ -1,3 +1,24 @@
 <div class="page-body">
-    <p>doctors works!</p>
+    
+    <table mat-table [dataSource]="doctorsTableDataSource">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID </th>      
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Vorname </th>      
+            <td mat-cell *matCellDef="let element">{{element?.name || "-"}} </td>
+        </ng-container>
+        <ng-container matColumnDef="surname">
+            <th mat-header-cell *matHeaderCellDef>Nachname </th>      
+            <td mat-cell *matCellDef="let element">{{element?.surname || "-"}} </td>
+        </ng-container>
+        <ng-container matColumnDef="profession">
+            <th mat-header-cell *matHeaderCellDef>Fachrichtung </th>
+            <td mat-cell *matCellDef="let element"> {{element.profession}} </td>
+        </ng-container>    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
 </div>

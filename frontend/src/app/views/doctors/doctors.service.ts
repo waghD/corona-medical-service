@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from 'src/app/shared/services/api-connection.service';
 import { Doctor } from 'src/app/shared/models/doctor.model';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class DoctorsService {
@@ -27,5 +28,10 @@ export class DoctorsService {
       .subscribe((updateDoc) => {
         console.log('Updated Doc: ', updateDoc);
       });
+  }
+
+  public getShifts(): Observable<Doctor[]> {
+    const doctors = this.apiConnection.getDoctors();
+    return doctors;
   }
 }

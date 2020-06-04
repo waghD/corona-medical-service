@@ -23,7 +23,7 @@ export class PresencePlannerComponent implements OnInit {
     this.precenseService.getShifts().subscribe((data: Shift[]) => {
       console.log(data);
       this.shifts = data;
-      console.log('converted shifts_:', this.shifts);
+      console.log('shifts:', this.shifts);
       this.shiftsTableDataSource.data = this.shifts;
     });
   }

@@ -1,3 +1,10 @@
-<div class="page-body">
-    <p>administration works!</p>
-</div>
+<mat-toolbar color="secondary">
+    <div fxFlex fxLayout fxLayoutAlign="start" style="margin-left:16px;">
+        <ul fxLayout class="navigation-items" fxLayoutGap="10px">
+            <li><a mat-flat-button color="primary" routerLink="/doctor_admin">Ärztepersonal verwalten</a></li>
+            <li><a mat-flat-button color="primary" routerLink="/patient_admin">Patienten verwalten</a></li>
+            <li><a mat-flat-button color="primary" routerLink="/helpers_admin">Pflegepersonal verwalten</a></li>
+            <li><a mat-flat-button color="primary" routerLink="/cleaners_admin">Reinigungspersonal verwalten</a></li>
+        </ul>
+    </div>
+</mat-toolbar>

@@ -16,3 +16,8 @@ body {
 .page-body {
     padding: 16px;
 }
+
+.mat-table {
+    display: table;
+    width: 100%;
+}
