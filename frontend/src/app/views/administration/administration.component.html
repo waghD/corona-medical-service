@@ -1,10 +1,24 @@
 <mat-toolbar color="secondary">
     <div fxFlex fxLayout fxLayoutAlign="start" style="margin-left:16px;">
         <ul fxLayout class="navigation-items" fxLayoutGap="10px">
-            <li><a mat-flat-button color="primary" routerLink="/doctor_admin">Ärztepersonal verwalten</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/patient_admin">Patienten verwalten</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/helpers_admin">Pflegepersonal verwalten</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/cleaners_admin">Reinigungspersonal verwalten</a></li>
+            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.DOCTOR ? 'primary' : ''"
+                    (click)="displayComponent = adminComponentTypes.DOCTOR">Ärztepersonal
+                    verwalten</button></li>
+            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.PATIENT ? 'primary' : ''"
+                    (click)="displayComponent = adminComponentTypes.PATIENT">Patienten
+                    verwalten</button></li>
+            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.HELPER ? 'primary' : ''"
+                    (click)="displayComponent = adminComponentTypes.HELPER">Pflegepersonal
+                    verwalten</button></li>
+            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.CLEANER ? 'primary' : ''"
+                    (click)="displayComponent = adminComponentTypes.CLEANER">Reinigungspersonal
+                    verwalten</button></li>
         </ul>
     </div>
 </mat-toolbar>
+<div class="page-body" [ngSwitch]="displayComponent">
+    <app-doctor-admin *ngSwitchCase="adminComponentTypes.DOCTOR"></app-doctor-admin>
+    <app-patient-admin *ngSwitchCase="adminComponentTypes.PATIENT"></app-patient-admin>
+    <app-helpers-admin *ngSwitchCase="adminComponentTypes.HELPER"></app-helpers-admin>
+    <app-cleaners-admin *ngSwitchCase="adminComponentTypes.CLEANER"></app-cleaners-admin>
+</div>
