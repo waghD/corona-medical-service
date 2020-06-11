@@ -2,13 +2,43 @@
     <div><a routerLink="/" class="home-link">Corona Medical Service</a></div>
     <div fxFlex fxLayout fxLayoutAlign="start" style="margin-left:16px;">
         <ul fxLayout class="navigation-items" fxLayoutGap="10px">
-            <li><a mat-flat-button color="primary" routerLink="/home">Home</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/patient">Patienten</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/doctors">Ärtzepersonal</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/helpers">Pflegepersonal</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/cleaners">Reinigungspersonal</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/presence-planner">Anwesenheitsplaner</a></li>
-            <li><a mat-flat-button color="primary" routerLink="/administration">Administration</a></li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.HOME ? 'accent' : ''" routerLink="/home">
+                    Home
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.PATIENT ? 'accent' : ''" routerLink="/patient">
+                    Patienten
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.DOCTORS ? 'accent' : ''" routerLink="/doctors">
+                    Ärtzepersonal
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.HELPERS ? 'accent' : ''" routerLink="/helpers">
+                    Pflegepersonal
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.CLEANERS ? 'accent' : ''" routerLink="/cleaners">
+                    Reinigungspersonal
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.PRESENCE_PLANNER ? 'accent' : ''"
+                    routerLink="/presence-planner">
+                    Anwesenheitsplaner
+                </a>
+            </li>
+            <li>
+                <a mat-button [color]="activeRoute === routes.ADMINISTRATION ? 'accent' : ''"
+                    routerLink="/administration">
+                    Administration
+                </a>
+            </li>
         </ul>
     </div>
 </mat-toolbar>
