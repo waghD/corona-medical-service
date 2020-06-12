@@ -19,7 +19,7 @@ export class DoctorsComponent implements OnInit {
     this.getDoctors();
   }
   getDoctors() {
-    this.doctorService.getShifts().subscribe((data: Doctor[]) => {
+    this.doctorService.getDocs().subscribe((data: Doctor[]) => {
       console.log(data);
       this.doctors = data;
       console.log('doctors:', this.doctors);

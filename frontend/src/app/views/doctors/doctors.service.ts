@@ -30,7 +30,7 @@ export class DoctorsService {
       });
   }
 
-  public getShifts(): Observable<Doctor[]> {
+  public getDocs(): Observable<Doctor[]> {
     const doctors = this.apiConnection.getDoctors();
     return doctors;
   }

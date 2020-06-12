@@ -1,0 +1,22 @@
+<!-- dialog-box.component.html -->
+<h1 mat-dialog-title><strong>{{action}}</strong></h1>
+<div mat-dialog-content>
+  <div form1 *ngIf="action != 'löschen'; else elseTemplate">
+  <mat-form-field>
+    <input placeholder="Name" matInput [(ngModel)]="local_data.name">
+  </mat-form-field>
+  <mat-form-field>
+    <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
+  </mat-form-field>
+  <mat-form-field>
+    <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
+  </mat-form-field>
+  </div>
+  <ng-template #elseTemplate>
+    Sicher, dass Sie <b>{{local_data.name}} {{local_data.surname}} ID: {{local_data.id}} </b> löschen wollen?
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="doAction()">{{action}}</button>
+  <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+</div>
