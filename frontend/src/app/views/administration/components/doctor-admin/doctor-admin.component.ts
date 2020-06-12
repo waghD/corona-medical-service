@@ -7,6 +7,7 @@ import { ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatDialogModule} from "@angular/material/dialog";
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
+import { Shift } from 'src/app/shared/models/shift.model';
 
 
 @Component({
@@ -44,6 +45,8 @@ export class DoctorAdminComponent implements OnInit {
         this.updateRowData(result.data);
       }else if(result.event == 'löschen'){
         this.deleteRowData(result.data);
+      }else if(result.event == 'neue Schicht'){
+        this.newShift(result.data);
       }
     });
   }
@@ -61,6 +64,23 @@ export class DoctorAdminComponent implements OnInit {
   }
   deleteRowData(row_obj){
     this.doctorAdminService.deleteDoc(row_obj.id);
+    this.refresh();
+  }
+
+  newShift(row_obj){
+    console.log('neue Schicht am: ', row_obj.Date);
+    console.log('neue Schicht von: ', row_obj.id);
+    const newShift = new Shift({
+      id: -1,
+      from: row_obj.Date.toISOString(),
+      to: row_obj.Date.toISOString(),
+      cleaner: null,
+      doc: row_obj.id,
+      helper: null,
+      station: null,
+    });
+
+    this.doctorAdminService.createShift(newShift);
     this.refresh();
   }
 

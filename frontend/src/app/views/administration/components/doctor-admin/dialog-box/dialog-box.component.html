@@ -41,10 +41,15 @@
   <mat-form-field>
     <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
   </mat-form-field>
+
   <mat-form-field>
-    <input matInput type="datetime" placeholder="start date">
+    <input placeholder="Tag wählen"  matInput [matDatepicker]="Datepicker" matInput [(ngModel)]="local_data.Date">
+    <mat-datepicker-toggle matSuffix [for]="Datepicker"></mat-datepicker-toggle>
+    <mat-datepicker #Datepicker></mat-datepicker>
   </mat-form-field>
+ 
 </div>
+
 
 <div mat-dialog-actions>
   <button mat-button (click)="doAction()">{{action}}</button>
