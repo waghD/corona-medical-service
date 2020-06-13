@@ -46,33 +46,27 @@ export class DoctorAdminService {
 
 }
 
-public async createShift(shift:Shift){
-  const doctors = await this.apiConnection.getDoctors().toPromise();
-  const stations = await this.apiConnection.getStations().toPromise();
-  const helpers = await this.apiConnection.getHelpers().toPromise();
-  const cleaners = await this.apiConnection.getCleaners().toPromise();
+public createShift(shift:Shift){
   
   const newShift = new Shift({
     id: -1,
     from: shift.from.toISOString(),
     to: shift.from.toISOString(),
 
-    cleaner: cleaners[0],
+    cleaner: null,
     // hier steh ich jetzt leider an, ich versteh nicht warum hier doc nicht passt..
+    // eigentlich sollten hier null eingaben funktionieren
     // zur Vereinfachung der Aufgabe würde ich vorschlagen, dass wir:
     //- nur Tageweise Schichten machen
     //- Schichten lassen sich nur erstellen, aber nicht löschen
     // dann sollte die Aufgabe bis Sonntag aufjedenfall schaffbar sein...
     doc: shift.doc,
-    helper: helpers[0],
-    station: stations[0],
+    helper: null,
+    station: null
   });
-  const createRes = await this.apiConnection
-    .createShift(newShift)
-    .toPromise();
-  console.log('Created Shift: ', createRes);
-
+  this.apiConnection.createShift(newShift).subscribe((shift) => {
+    console.log('Created Shift: ', shift);
+  });
 }
-
 
 }
