@@ -24,7 +24,7 @@ export class HelpersService {
       helper.surname = help.surname;
     }
 
-    return this.db.saveCleaner(helper);
+    return this.db.saveHelper(helper);
   }
 
   async deleteHelper(id: number): Promise<Helper> {
