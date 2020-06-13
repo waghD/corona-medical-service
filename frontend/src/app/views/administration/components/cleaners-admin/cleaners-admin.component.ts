@@ -76,7 +76,7 @@ export class CleanersAdminComponent implements OnInit {
       id: -1,
       from: row_obj.Date.toISOString(),
       to: row_obj.Date.toISOString(),
-      cleaner: row_obj.id,
+      cleaner: this.cleaners.find((cleaner) => cleaner.id === row_obj.id).toDto(),
       doc: null,
       helper: null,
       station: null,

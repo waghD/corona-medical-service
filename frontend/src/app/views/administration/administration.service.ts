@@ -114,10 +114,11 @@ export class AdministrationService {
   }
 
   public createShift(shift: Shift) {
-    var toDate = shift.from;
-    toDate.setDate(toDate.getDate() + 1);
-
-    console.log('oldShift: ', shift);
+    var toDate = new Date;
+   
+    toDate.setDate(shift.from.getDate() + 1);
+    console.log('from: ', shift.from);
+    console.log('toDate: ', toDate);
 
     const newShift = new Shift({
       id: -1,
