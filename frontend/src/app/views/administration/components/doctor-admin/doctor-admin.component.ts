@@ -75,7 +75,7 @@ export class DoctorAdminComponent implements OnInit {
       from: row_obj.Date.toISOString(),
       to: row_obj.Date.toISOString(),
       cleaner: null,
-      doc: row_obj.id,
+      doc: this.doctors.find((doc) => doc.id === row_obj.id).toDto(),
       helper: null,
       station: null,
     });
@@ -91,10 +91,6 @@ export class DoctorAdminComponent implements OnInit {
       this.doctors = data;
       this.doctorsTableDataSource.data = this.doctors;
       this.changeDetectorRefs.detectChanges();
-
-
-      
-
     });
   }
 }

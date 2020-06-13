@@ -104,35 +104,33 @@ export class AdministrationService {
 
   // offen: Station Auswahl beim Anlegen in Dialog
   public createPatient(patient: Patient) {
-      const newPatient = new Patient({
-        id: 9,
-        name: patient.name,
-        surname: patient.surname,   
-        station: null,
-      });
-      return this.apiConnection.createPatient(newPatient);
-    }
-    
-
-  
+    const newPatient = new Patient({
+      id: 9,
+      name: patient.name,
+      surname: patient.surname,
+      station: null,
+    });
+    return this.apiConnection.createPatient(newPatient);
+  }
 
   public createShift(shift: Shift) {
     var toDate = shift.from;
-    toDate.setDate( toDate.getDate() +1 );
+    toDate.setDate(toDate.getDate() + 1);
+
+    console.log('oldShift: ', shift);
 
     const newShift = new Shift({
       id: -1,
       from: shift.from.toISOString(),
-  
+
       to: toDate.toISOString(),
 
       cleaner: shift.cleaner,
       doc: shift.doc,
       helper: shift.helper,
-      station: shift.station
+      station: shift.station,
     });
+    console.log('newShift: ', newShift);
     return this.apiConnection.createShift(newShift);
   }
-
-  
 }
