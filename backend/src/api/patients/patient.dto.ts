@@ -1,6 +1,6 @@
 import { Station } from '../stations/station.dto';
 import { IsInt, IsString, ValidateNested, IsOptional } from 'class-validator';
-import { OmitType, PartialType } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -24,7 +24,7 @@ export class Patient {
   surname: string;
 
   @ValidateNested()
-  @ManyToOne(type => Station)
+  @ManyToOne(type => Station, { onDelete: 'CASCADE' })
   @JoinColumn()
   station: Station;
 }

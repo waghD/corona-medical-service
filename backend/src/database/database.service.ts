@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { Cleaner } from 'src/api/cleaners/cleaner.dto';
 import { Doctor } from 'src/api/doctors/doctor.dto';
 import { Helper } from 'src/api/helpers/helper.dto';

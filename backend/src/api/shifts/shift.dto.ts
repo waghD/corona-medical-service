@@ -32,22 +32,22 @@ export class Shift {
   to: Date;
 
   @ValidateNested()
-  @ManyToOne(type => Doctor)
+  @ManyToOne(type => Doctor, { onDelete: 'CASCADE' })
   @JoinColumn()
   doc: Doctor;
 
   @ValidateNested()
-  @ManyToOne(type => Helper)
+  @ManyToOne(type => Helper, { onDelete: 'CASCADE' })
   @JoinColumn()
   helper: Helper;
 
   @ValidateNested()
-  @ManyToOne(type => Cleaner)
+  @ManyToOne(type => Cleaner, { onDelete: 'CASCADE' })
   @JoinColumn()
   cleaner: Cleaner;
 
   @ValidateNested()
-  @ManyToOne(type => Station)
+  @ManyToOne(type => Station, { onDelete: 'CASCADE' })
   @JoinColumn()
   station: Station;
 }
