@@ -5,6 +5,7 @@ import { Doctor } from 'src/app/shared/models/doctor.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
+import { subscribeOn } from 'rxjs/operators';
 
 @Component({
   selector: 'app-doctor-admin',
@@ -50,17 +51,20 @@ export class DoctorAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.doctorAdminService.createDoc(row_obj);
-    this.refresh();
+    this.doctorAdminService.createDoc(row_obj).subscribe(() => {
+      this.refresh();
+    });
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.doctorAdminService.editDoc(row_obj.id, row_obj);
-    this.refresh();
+    this.doctorAdminService.editDoc(row_obj.id, row_obj).subscribe(() => {
+      this.refresh();
+    });
   }
   deleteRowData(row_obj) {
-    this.doctorAdminService.deleteDoc(row_obj.id);
-    this.refresh();
+    this.doctorAdminService.deleteDoc(row_obj.id).subscribe(() => {
+      this.refresh();
+    });
   }
 
   newShift(row_obj) {
@@ -76,15 +80,15 @@ export class DoctorAdminComponent implements OnInit {
       station: null,
     });
 
-    this.doctorAdminService.createShift(newShift);
-    this.refresh();
+    this.doctorAdminService.createShift(newShift).subscribe(() => {
+      this.refresh();
+    });
   }
 
   refresh() {
     this.doctorAdminService.getShifts().subscribe((data: Doctor[]) => {
       console.log('refresh data');
       this.doctors = data;
-      this.doctorsTableDataSource = new MatTableDataSource<Doctor>();
       this.doctorsTableDataSource.data = this.doctors;
       this.changeDetectorRefs.detectChanges();
     });

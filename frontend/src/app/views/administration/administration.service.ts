@@ -14,21 +14,15 @@ export class AdministrationService {
   }
 
   public deleteDoc(id: number) {
-    this.apiConnection.deleteDoctor(id).subscribe((doc) => {
-      console.log('Deleted Doctor: ', doc);
-    });
+    return this.apiConnection.deleteDoctor(id);
   }
 
   public editDoc(id: number, doc: Doctor) {
-    this.apiConnection
-      .editDoctor(id, {
-        name: doc.name,
-        profession: doc.profession,
-        surname: doc.surname,
-      })
-      .subscribe((updateDoc) => {
-        console.log('Updated Doc: ', updateDoc);
-      });
+    return this.apiConnection.editDoctor(id, {
+      name: doc.name,
+      profession: doc.profession,
+      surname: doc.surname,
+    });
   }
 
   public createDoc(doc: Doctor) {
@@ -38,9 +32,7 @@ export class AdministrationService {
       profession: doc.profession,
       surname: doc.surname,
     });
-    this.apiConnection.createDoctor(newDoc).subscribe((doc) => {
-      console.log('Created Doctor: ', doc);
-    });
+    return this.apiConnection.createDoctor(newDoc);
   }
 
   public createShift(shift: Shift) {
@@ -60,8 +52,6 @@ export class AdministrationService {
       helper: null,
       station: null,
     });
-    this.apiConnection.createShift(newShift).subscribe((shift) => {
-      console.log('Created Shift: ', shift);
-    });
+    return this.apiConnection.createShift(newShift);
   }
 }
