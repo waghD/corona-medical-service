@@ -88,15 +88,19 @@ export class CreateShift extends OmitType(Shift, [
   'cleaner',
   'station',
 ]) {
+  @IsOptional()
   @IsInt()
   doc: number;
 
+  @IsOptional()
   @IsInt()
   helper: number;
 
+  @IsOptional()
   @IsInt()
   cleaner: number;
 
+  @IsOptional()
   @IsInt()
   station: number;
 }

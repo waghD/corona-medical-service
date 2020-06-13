@@ -52,15 +52,24 @@ export class Shift {
   }
 
   toDto(): ShiftUploadDto {
-    return {
+    const dtoObj: ShiftUploadDto = {
       id: this.id,
       from: this.from.toISOString(),
       to: this.to.toISOString(),
-      doc: this.doc.id,
-      helper: this.helper.id,
-      cleaner: this.cleaner.id,
-      station: this.station.id,
     };
+    if (this.doc) {
+      dtoObj.doc = this.doc.id;
+    }
+    if (this.helper) {
+      dtoObj.helper = this.helper.id;
+    }
+    if (this.cleaner) {
+      dtoObj.cleaner = this.cleaner.id;
+    }
+    if (this.station) {
+      dtoObj.station = this.station.id;
+    }
+    return dtoObj;
   }
 
   static partialToDto(
