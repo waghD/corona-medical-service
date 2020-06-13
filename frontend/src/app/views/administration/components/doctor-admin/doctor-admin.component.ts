@@ -91,6 +91,10 @@ export class DoctorAdminComponent implements OnInit {
       this.doctors = data;
       this.doctorsTableDataSource.data = this.doctors;
       this.changeDetectorRefs.detectChanges();
+
+
+      
+
     });
   }
 }

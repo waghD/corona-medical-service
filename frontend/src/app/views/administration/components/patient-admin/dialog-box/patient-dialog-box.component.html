@@ -1,16 +1,14 @@
 <!-- dialog-box.component.html -->
 <h1 mat-dialog-title><strong>{{action}}</strong></h1>
 <div mat-dialog-content>
-  <div form_bearbeiten *ngIf="action == 'neuer Arzt'">
+  <div form_bearbeiten *ngIf="action == 'neuer Patient'">
   <mat-form-field>
     <input placeholder="Name" matInput [(ngModel)]="local_data.name">
   </mat-form-field>
   <mat-form-field>
     <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
   </mat-form-field>
-  <mat-form-field>
-    <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
-  </mat-form-field>
+
   </div>
 
   <div form_bearbeiten *ngIf="action == 'bearbeiten'">
@@ -19,9 +17,6 @@
     </mat-form-field>
     <mat-form-field>
       <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
-    </mat-form-field>
-    <mat-form-field>
-      <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
     </mat-form-field>
   </div>
 
@@ -37,9 +32,6 @@
   </mat-form-field>
   <mat-form-field>
     <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
-  </mat-form-field>
-  <mat-form-field>
-    <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
   </mat-form-field>
 
   <mat-form-field>

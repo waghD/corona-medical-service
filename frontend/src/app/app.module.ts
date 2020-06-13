@@ -15,11 +15,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { DialogBoxComponent } from './views/administration/components/doctor-admin/dialog-box/dialog-box.component';
-
-
+import { CleanerDialogBoxComponent } from './views/administration/components/cleaners-admin/dialog-box/cleaner-dialog-box.component';
+import { HelperDialogBoxComponent } from './views/administration/components/helpers-admin/dialog-box/helper-dialog-box.component';
+import { PatientDialogBoxComponent } from './views/administration/components/patient-admin/dialog-box/patient-dialog-box.component';
 
 @NgModule({
-  declarations: [AppComponent, DialogBoxComponent],
+  declarations: [AppComponent, DialogBoxComponent, CleanerDialogBoxComponent, HelperDialogBoxComponent, PatientDialogBoxComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

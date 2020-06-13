@@ -3,6 +3,10 @@ import { ApiConnectionService } from 'src/app/shared/services/api-connection.ser
 import { Observable } from 'rxjs';
 import { Doctor } from 'src/app/shared/models/doctor.model';
 import { Shift } from 'src/app/shared/models/shift.model';
+import { Cleaner } from 'src/app/shared/models/cleaner.model';
+import { Helper } from 'src/app/shared/models/helper.model';
+import { Patient } from 'src/app/shared/models/patient.model';
+import { Station } from 'src/app/shared/models/station.model';
 
 @Injectable()
 export class AdministrationService {
@@ -13,8 +17,35 @@ export class AdministrationService {
     return doctors;
   }
 
+  public getCleaners(): Observable<Cleaner[]> {
+    const cleaners = this.apiConnection.getCleaners();
+    return cleaners;
+  }
+
+  public getHelpers(): Observable<Helper[]> {
+    const helpers = this.apiConnection.getHelpers();
+    return helpers;
+  }
+
+  public getPatients(): Observable<Patient[]> {
+    const patients = this.apiConnection.getPatients();
+    return patients;
+  }
+
   public deleteDoc(id: number) {
     return this.apiConnection.deleteDoctor(id);
+  }
+
+  public deleteCleaner(id: number) {
+    return this.apiConnection.deleteCleaner(id);
+  }
+
+  public deleteHelper(id: number) {
+    return this.apiConnection.deleteHelper(id);
+  }
+
+  public deletePatient(id: number) {
+    return this.apiConnection.deletePatient(id);
   }
 
   public editDoc(id: number, doc: Doctor) {
@@ -22,6 +53,24 @@ export class AdministrationService {
       name: doc.name,
       profession: doc.profession,
       surname: doc.surname,
+    });
+  }
+  public editCleaner(id: number, cleaner: Cleaner) {
+    return this.apiConnection.editCleaner(id, {
+      name: cleaner.name,
+      surname: cleaner.surname,
+    });
+  }
+  public editHelper(id: number, helper: Helper) {
+    return this.apiConnection.editHelper(id, {
+      name: helper.name,
+      surname: helper.surname,
+    });
+  }
+  public editPatient(id: number, patient: Patient) {
+    return this.apiConnection.editPatient(id, {
+      name: patient.name,
+      surname: patient.surname,
     });
   }
 
@@ -35,23 +84,55 @@ export class AdministrationService {
     return this.apiConnection.createDoctor(newDoc);
   }
 
+  public createCleaner(cleaner: Cleaner) {
+    const newCleaner = new Cleaner({
+      id: 9,
+      name: cleaner.name,
+      surname: cleaner.surname,
+    });
+    return this.apiConnection.createCleaner(newCleaner);
+  }
+
+  public createHelper(helper: Helper) {
+    const newHelper = new Helper({
+      id: 9,
+      name: helper.name,
+      surname: helper.surname,
+    });
+    return this.apiConnection.createHelper(newHelper);
+  }
+
+  // offen: Station Auswahl beim Anlegen in Dialog
+  public createPatient(patient: Patient) {
+      const newPatient = new Patient({
+        id: 9,
+        name: patient.name,
+        surname: patient.surname,   
+        station: null,
+      });
+      return this.apiConnection.createPatient(newPatient);
+    }
+    
+
+  
+
   public createShift(shift: Shift) {
+    var toDate = shift.from;
+    toDate.setDate( toDate.getDate() +1 );
+
     const newShift = new Shift({
       id: -1,
       from: shift.from.toISOString(),
-      to: shift.from.toISOString(),
+  
+      to: toDate.toISOString(),
 
-      cleaner: null,
-      // hier steh ich jetzt leider an, ich versteh nicht warum hier doc nicht passt..
-      // eigentlich sollten hier null eingaben funktionieren
-      // zur Vereinfachung der Aufgabe würde ich vorschlagen, dass wir:
-      //- nur Tageweise Schichten machen
-      //- Schichten lassen sich nur erstellen, aber nicht löschen
-      // dann sollte die Aufgabe bis Sonntag aufjedenfall schaffbar sein...
+      cleaner: shift.cleaner,
       doc: shift.doc,
-      helper: null,
-      station: null,
+      helper: shift.helper,
+      station: shift.station
     });
     return this.apiConnection.createShift(newShift);
   }
+
+  
 }
