@@ -21,13 +21,6 @@ export class DoctorsService {
     this.apiConnection.createDoctor(newDoc).subscribe((doc) => {
       console.log('Created Doctor: ', doc);
     });
-    this.apiConnection
-      .editDoctor(2, {
-        profession: 'UpdatedProfession',
-      })
-      .subscribe((updateDoc) => {
-        console.log('Updated Doc: ', updateDoc);
-      });
   }
 
   public getDocs(): Observable<Doctor[]> {
