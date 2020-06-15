@@ -78,7 +78,7 @@ export class HelpersAdminComponent implements OnInit {
       to: row_obj.Date.toISOString(),
       cleaner: null,
       doc: null,
-      helper: row_obj.id,
+      helper: this.helpers.find((helper) => helper.id === row_obj.id).toDto(),
       station: null,
     });
 
