@@ -25,8 +25,6 @@ export class DoctorAdminComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
-    // refresh funzt leider noch nicht wie es soll
-    // Lösungsidee: Redirect zur Homepage?
   }
 
   openDialog(action, obj) {
