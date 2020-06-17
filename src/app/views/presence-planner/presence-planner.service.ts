@@ -8,7 +8,6 @@ export class PresencePlannerService {
   constructor(private apiConnection: ApiConnectionService) {}
 
   public getShifts(): Observable<Shift[]> {
-    const shifts = this.apiConnection.getShifts();
-    return shifts;
+    return this.apiConnection.getShifts();
   }
 }

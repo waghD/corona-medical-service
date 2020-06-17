@@ -2,24 +2,24 @@ import { Station, StationDto } from './station.model';
 import { RecursivePartial } from './partial.model';
 
 export interface PatientDto {
-  id: number;
+  id: string;
   name: string;
   surname: string;
-  station: StationDto;
+  station?: StationDto;
 }
 
 export interface PatientUploadDto {
-  id: number;
+  id: string;
   name: string;
   surname: string;
-  station: number;
+  station?: StationDto;
 }
 
 export class Patient {
-  public readonly id: number;
+  public readonly id: string;
   public name: string;
   public surname: string;
-  public station: Station;
+  public station?: Station;
 
   constructor(dto: PatientDto) {
     this.id = dto.id;
@@ -29,12 +29,15 @@ export class Patient {
   }
 
   toDto(): PatientUploadDto {
-    return {
+    const dto: PatientUploadDto = {
       id: this.id,
       name: this.name,
       surname: this.surname,
-      station: this.station.id,
     };
+    if (this.station) {
+      dto.station = this.station.toDto();
+    }
+    return dto;
   }
 
   static partialToDto(
@@ -43,7 +46,7 @@ export class Patient {
     const dto: RecursivePartial<PatientUploadDto> = {};
     for (let key in partial) {
       if (key === 'station') {
-        dto[key] = partial.station.id;
+        dto[key] = Station.partialToDto(partial.station);
       } else {
         dto[key] = partial[key];
       }

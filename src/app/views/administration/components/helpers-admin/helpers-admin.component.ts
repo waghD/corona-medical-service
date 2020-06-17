@@ -7,8 +7,6 @@ import { HelperDialogBoxComponent } from './dialog-box/helper-dialog-box.compone
 import { Shift } from 'src/app/shared/models/shift.model';
 import { subscribeOn } from 'rxjs/operators';
 import { Helper } from 'src/app/shared/models/helper.model';
-;
-
 @Component({
   selector: 'app-helpers-admin',
   templateUrl: './helpers-admin.component.html',
@@ -18,7 +16,6 @@ export class HelpersAdminComponent implements OnInit {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   helpers: Helper[] = [];
   helpersTableDataSource = new MatTableDataSource<Helper>();
-  
 
   constructor(
     private helperAdminService: AdministrationService,
@@ -37,7 +34,7 @@ export class HelpersAdminComponent implements OnInit {
       width: '250px',
       data: obj,
     });
-    
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event == 'neues Pflegepersonal') {
         this.addRowData(result.data);
@@ -53,18 +50,18 @@ export class HelpersAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.helperAdminService.createHelper(row_obj).subscribe(() => {
+    this.helperAdminService.createHelper(row_obj).then(() => {
       this.refresh();
     });
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.helperAdminService.editHelper(row_obj.id, row_obj).subscribe(() => {
+    this.helperAdminService.editHelper(row_obj.id, row_obj).then(() => {
       this.refresh();
     });
   }
   deleteRowData(row_obj) {
-    this.helperAdminService.deleteHelper(row_obj.id).subscribe(() => {
+    this.helperAdminService.deleteHelper(row_obj.id).then(() => {
       this.refresh();
     });
   }
@@ -73,7 +70,7 @@ export class HelpersAdminComponent implements OnInit {
     console.log('neue Schicht am: ', row_obj.Date);
     console.log('neue Schicht von: ', row_obj.id);
     const newShift = new Shift({
-      id: -1,
+      id: 'tempID',
       from: row_obj.Date.toISOString(),
       to: row_obj.Date.toISOString(),
       cleaner: null,
@@ -82,11 +79,10 @@ export class HelpersAdminComponent implements OnInit {
       station: null,
     });
 
-    this.helperAdminService.createShift(newShift).subscribe(() => {
+    this.helperAdminService.createShift(newShift).then(() => {
       this.refresh();
     });
   }
-
 
   refresh() {
     this.helperAdminService.getHelpers().subscribe((data: Helper[]) => {

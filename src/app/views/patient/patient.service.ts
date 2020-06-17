@@ -8,7 +8,6 @@ export class PatientService {
   constructor(private apiConnection: ApiConnectionService) {}
 
   public getPatients(): Observable<Patient[]> {
-    const patients = this.apiConnection.getPatients();
-    return patients;
+    return this.apiConnection.getPatients();
   }
 }

@@ -5,7 +5,6 @@ import { Doctor } from 'src/app/shared/models/doctor.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
-import { subscribeOn } from 'rxjs/operators';
 
 @Component({
   selector: 'app-doctor-admin',
@@ -49,18 +48,19 @@ export class DoctorAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.doctorAdminService.createDoc(row_obj).subscribe(() => {
+    console.log('row_obj: ', row_obj);
+    this.doctorAdminService.createDoc(row_obj).then(() => {
       this.refresh();
     });
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.doctorAdminService.editDoc(row_obj.id, row_obj).subscribe(() => {
+    this.doctorAdminService.editDoc(row_obj.id, row_obj).then(() => {
       this.refresh();
     });
   }
   deleteRowData(row_obj) {
-    this.doctorAdminService.deleteDoc(row_obj.id).subscribe(() => {
+    this.doctorAdminService.deleteDoc(row_obj.id).then(() => {
       this.refresh();
     });
   }
@@ -69,7 +69,7 @@ export class DoctorAdminComponent implements OnInit {
     console.log('neue Schicht am: ', row_obj.Date);
     console.log('neue Schicht von: ', row_obj.id);
     const newShift = new Shift({
-      id: -1,
+      id: 'tempID',
       from: row_obj.Date.toISOString(),
       to: row_obj.Date.toISOString(),
       cleaner: null,
@@ -78,13 +78,13 @@ export class DoctorAdminComponent implements OnInit {
       station: null,
     });
 
-    this.doctorAdminService.createShift(newShift).subscribe(() => {
+    this.doctorAdminService.createShift(newShift).then(() => {
       this.refresh();
     });
   }
 
   refresh() {
-    this.doctorAdminService.getShifts().subscribe((data: Doctor[]) => {
+    this.doctorAdminService.getDoctors().subscribe((data: Doctor[]) => {
       console.log('refresh data');
       this.doctors = data;
       this.doctorsTableDataSource.data = this.doctors;

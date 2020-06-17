@@ -9,8 +9,6 @@ export class CleanersService {
   constructor(private apiConnection: ApiConnectionService) {}
 
   public getCleaners(): Observable<Cleaner[]> {
-    const cleaners = this.apiConnection.getCleaners();
-    return cleaners;
+    return this.apiConnection.getCleaners();
   }
 }
-

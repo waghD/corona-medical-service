@@ -6,7 +6,7 @@ try {
 
 let fs: FirebaseFirestore.Firestore;
 
-export const setupUser = functions
+exports.setupUser = functions
   .region('europe-west1')
   .auth.user()
   .onCreate((user, context) => {

@@ -5,7 +5,7 @@ import { Station, StationDto } from './station.model';
 import { RecursivePartial } from './partial.model';
 
 export interface ShiftDto {
-  id: number;
+  id: string;
   from: string;
   to: string;
   doc?: DoctorDto;
@@ -15,17 +15,17 @@ export interface ShiftDto {
 }
 
 export interface ShiftUploadDto {
-  id: number;
+  id: string;
   from: string;
   to: string;
-  doc?: number;
-  helper?: number;
-  cleaner?: number;
-  station?: number;
+  doc?: DoctorDto;
+  helper?: HelperDto;
+  cleaner?: CleanerDto;
+  station?: StationDto;
 }
 
 export class Shift {
-  public readonly id: number;
+  public readonly id: string;
   public from: Date;
   public to: Date;
   public doc?: Doctor;
@@ -58,16 +58,16 @@ export class Shift {
       to: this.to.toISOString(),
     };
     if (this.doc) {
-      dtoObj.doc = this.doc.id;
+      dtoObj.doc = this.doc.toDto();
     }
     if (this.helper) {
-      dtoObj.helper = this.helper.id;
+      dtoObj.helper = this.helper.toDto();
     }
     if (this.cleaner) {
-      dtoObj.cleaner = this.cleaner.id;
+      dtoObj.cleaner = this.cleaner.toDto();
     }
     if (this.station) {
-      dtoObj.station = this.station.id;
+      dtoObj.station = this.station.toDto();
     }
     return dtoObj;
   }
@@ -85,17 +85,17 @@ export class Shift {
     if (partial.to) {
       dto.to = (partial.to as Date).toISOString();
     }
-    if (partial.doc && partial.doc.id) {
-      dto.doc = partial.doc.id;
+    if (partial.doc) {
+      dto.doc = Doctor.partialToDto(partial.doc);
     }
-    if (partial.helper && partial.helper.id) {
-      dto.helper = partial.helper.id;
+    if (partial.helper) {
+      dto.helper = Helper.partialToDto(partial.helper);
     }
-    if (partial.cleaner && partial.cleaner.id) {
-      dto.cleaner = partial.cleaner.id;
+    if (partial.cleaner) {
+      dto.cleaner = Cleaner.partialToDto(partial.cleaner);
     }
-    if (partial.station && partial.station.id) {
-      dto.station = partial.station.id;
+    if (partial.station) {
+      dto.station = Station.partialToDto(partial.station);
     }
     return dto;
   }

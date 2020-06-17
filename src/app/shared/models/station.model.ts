@@ -1,12 +1,12 @@
 import { RecursivePartial } from './partial.model';
 
 export interface StationDto {
-  id: number;
+  id: string;
   station: string;
 }
 
 export class Station {
-  public readonly id: number;
+  public readonly id: string;
   public station: string;
 
   constructor(dto: StationDto) {

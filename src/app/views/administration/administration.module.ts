@@ -12,6 +12,7 @@ import { PatientDialogBoxComponent } from './components/patient-admin/dialog-box
 import { HelperDialogBoxComponent } from './components/helpers-admin/dialog-box/helper-dialog-box.component';
 import { CleanerDialogBoxComponent } from './components/cleaners-admin/dialog-box/cleaner-dialog-box.component';
 import { DialogBoxComponent } from './components/doctor-admin/dialog-box/dialog-box.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [{ path: '', component: AdministrationComponent }];
 
@@ -27,7 +28,13 @@ const routes: Routes = [{ path: '', component: AdministrationComponent }];
     CleanersAdminComponent,
     CleanerDialogBoxComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   providers: [AdministrationService],
 })
 export class AdministrationModule {}

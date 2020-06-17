@@ -8,7 +8,6 @@ export class HelpersService {
   constructor(private apiConnection: ApiConnectionService) {}
 
   public getHelpers(): Observable<Helper[]> {
-    const helpers = this.apiConnection.getHelpers();
-    return helpers;
+    return this.apiConnection.getHelpers();
   }
 }

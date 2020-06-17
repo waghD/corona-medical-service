@@ -10,24 +10,33 @@ import { Cleaner, CleanerDto } from '../models/cleaner.model';
 import { Station, StationDto } from '../models/station.model';
 import { Shift, ShiftDto } from '../models/shift.model';
 import { RecursivePartial } from '../models/partial.model';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiConnectionService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private firestore: AngularFirestore) {}
 
   /**
-   * Gets a list of all Doctors
+   * Returns a stream of all Doctors
    *
    * @returns List of doctors
    */
   public getDoctors(): Observable<Doctor[]> {
-    return this.httpClient
-      .get<DoctorDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/doctors`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Doctor(dto))));
+    return this.firestore
+      .collection<DoctorDto>('doctors')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            console.log(documentSnap);
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Doctor(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -36,12 +45,18 @@ export class ApiConnectionService {
    *
    * @returns single doctor
    */
-  public getDoctorById(id: number): Observable<Doctor> {
-    return this.httpClient
-      .get<DoctorDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/doctors/${id}`
-      )
-      .pipe(map((dto) => new Doctor(dto)));
+  public getDoctorById(id: string): Observable<Doctor> {
+    return this.firestore
+      .collection('doctors')
+      .doc<DoctorDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Doctor(dto);
+        })
+      );
   }
 
   /**
@@ -50,16 +65,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Doctor
    */
-  public createDoctor(doctor: Doctor): Observable<Doctor> {
+  public createDoctor(doctor: Doctor): Promise<void> {
     if (!(doctor instanceof Doctor)) {
       throw new Error('Parameter is not instance of Doctor class');
     }
-    return this.httpClient
-      .put<DoctorDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/doctors`,
-        doctor.toDto()
-      )
-      .pipe(map((dto) => new Doctor(dto)));
+    const dto = doctor.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('doctors').doc<DoctorDto>(id).set(dto);
   }
 
   /**
@@ -72,15 +85,14 @@ export class ApiConnectionService {
    * @returns The complete updated Doctor object
    */
   public editDoctor(
-    id: number,
+    id: string,
     updatedDoctor: RecursivePartial<Doctor>
-  ): Observable<Doctor> {
-    return this.httpClient
-      .post<DoctorDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/doctors/${id}`,
-        Doctor.partialToDto(updatedDoctor)
-      )
-      .pipe(map((dto) => new Doctor(dto)));
+  ): Promise<void> {
+    const dto = Doctor.partialToDto(updatedDoctor);
+    return this.firestore
+      .collection('doctors')
+      .doc<RecursivePartial<Doctor>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -89,12 +101,8 @@ export class ApiConnectionService {
    *
    * @returns deleted Doctor object
    */
-  public deleteDoctor(id: number): Observable<Doctor> {
-    return this.httpClient
-      .delete<DoctorDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/doctors/${id}`
-      )
-      .pipe(map((dto) => new Doctor(dto)));
+  public deleteDoctor(id: string): Promise<void> {
+    return this.firestore.collection('doctors').doc(id).delete();
   }
 
   /**
@@ -103,11 +111,18 @@ export class ApiConnectionService {
    * @returns List of Helpers
    */
   public getHelpers(): Observable<Helper[]> {
-    return this.httpClient
-      .get<HelperDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/helpers`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Helper(dto))));
+    return this.firestore
+      .collection<HelperDto>('helpers')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Helper(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -116,12 +131,18 @@ export class ApiConnectionService {
    *
    * @returns single Helper
    */
-  public getHelperById(id: number): Observable<Helper> {
-    return this.httpClient
-      .get<HelperDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/helpers/${id}`
-      )
-      .pipe(map((dto) => new Helper(dto)));
+  public getHelperById(id: string): Observable<Helper> {
+    return this.firestore
+      .collection('helpers')
+      .doc<HelperDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Helper(dto);
+        })
+      );
   }
 
   /**
@@ -130,16 +151,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Helper
    */
-  public createHelper(helper: Helper): Observable<Helper> {
+  public createHelper(helper: Helper): Promise<void> {
     if (!(helper instanceof Helper)) {
       throw new Error('Parameter is not instance of Helper class');
     }
-    return this.httpClient
-      .put<HelperDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/helpers`,
-        helper.toDto()
-      )
-      .pipe(map((dto) => new Helper(dto)));
+    const dto = helper.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('helpers').doc<HelperDto>(id).set(dto);
   }
 
   /**
@@ -152,15 +171,14 @@ export class ApiConnectionService {
    * @returns The complete updated Helper object
    */
   public editHelper(
-    id: number,
+    id: string,
     updatedHelper: RecursivePartial<Helper>
-  ): Observable<Helper> {
-    return this.httpClient
-      .post<HelperDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/helpers/${id}`,
-        Helper.partialToDto(updatedHelper)
-      )
-      .pipe(map((dto) => new Helper(dto)));
+  ): Promise<void> {
+    const dto = Helper.partialToDto(updatedHelper);
+    return this.firestore
+      .collection('helpers')
+      .doc<RecursivePartial<Helper>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -169,12 +187,8 @@ export class ApiConnectionService {
    *
    * @returns deleted Helper object
    */
-  public deleteHelper(id: number): Observable<Helper> {
-    return this.httpClient
-      .delete<HelperDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/helpers/${id}`
-      )
-      .pipe(map((dto) => new Helper(dto)));
+  public deleteHelper(id: string): Promise<void> {
+    return this.firestore.collection('helpers').doc(id).delete();
   }
 
   /**
@@ -183,11 +197,18 @@ export class ApiConnectionService {
    * @returns List of Cleaners
    */
   public getCleaners(): Observable<Cleaner[]> {
-    return this.httpClient
-      .get<CleanerDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/cleaners`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Cleaner(dto))));
+    return this.firestore
+      .collection<CleanerDto>('cleaners')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Cleaner(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -196,12 +217,18 @@ export class ApiConnectionService {
    *
    * @returns single Cleaner
    */
-  public getCleanerById(id: number): Observable<Cleaner> {
-    return this.httpClient
-      .get<CleanerDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/cleaners/${id}`
-      )
-      .pipe(map((dto) => new Cleaner(dto)));
+  public getCleanerById(id: string): Observable<Cleaner> {
+    return this.firestore
+      .collection('cleaners')
+      .doc<CleanerDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Cleaner(dto);
+        })
+      );
   }
 
   /**
@@ -210,16 +237,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Cleaner
    */
-  public createCleaner(cleaner: Cleaner): Observable<Cleaner> {
+  public createCleaner(cleaner: Cleaner): Promise<void> {
     if (!(cleaner instanceof Cleaner)) {
       throw new Error('Given parameter is not instance of Cleaner class');
     }
-    return this.httpClient
-      .put<CleanerDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/cleaners`,
-        cleaner.toDto()
-      )
-      .pipe(map((dto) => new Cleaner(dto)));
+    const dto = cleaner.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('cleaners').doc<CleanerDto>(id).set(dto);
   }
 
   /**
@@ -232,15 +257,14 @@ export class ApiConnectionService {
    * @returns The complete updated Cleaner object
    */
   public editCleaner(
-    id: number,
+    id: string,
     updatedCleaner: RecursivePartial<Cleaner>
-  ): Observable<Cleaner> {
-    return this.httpClient
-      .post<CleanerDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/cleaners/${id}`,
-        Cleaner.partialToDto(updatedCleaner)
-      )
-      .pipe(map((dto) => new Cleaner(dto)));
+  ): Promise<void> {
+    const dto = Helper.partialToDto(updatedCleaner);
+    return this.firestore
+      .collection('cleaners')
+      .doc<RecursivePartial<Cleaner>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -249,12 +273,8 @@ export class ApiConnectionService {
    *
    * @returns deleted Cleaner object
    */
-  public deleteCleaner(id: number): Observable<Cleaner> {
-    return this.httpClient
-      .delete<CleanerDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/cleaners/${id}`
-      )
-      .pipe(map((dto) => new Cleaner(dto)));
+  public deleteCleaner(id: string): Promise<void> {
+    return this.firestore.collection('cleaners').doc(id).delete();
   }
 
   /**
@@ -263,11 +283,18 @@ export class ApiConnectionService {
    * @returns List of Patients
    */
   public getPatients(): Observable<Patient[]> {
-    return this.httpClient
-      .get<PatientDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/patients`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Patient(dto))));
+    return this.firestore
+      .collection<PatientDto>('patients')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Patient(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -276,12 +303,18 @@ export class ApiConnectionService {
    *
    * @returns single Patient
    */
-  public getPatientById(id: number): Observable<Patient> {
-    return this.httpClient
-      .get<PatientDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/patients/${id}`
-      )
-      .pipe(map((dto) => new Patient(dto)));
+  public getPatientById(id: string): Observable<Patient> {
+    return this.firestore
+      .collection('patients')
+      .doc<PatientDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Patient(dto);
+        })
+      );
   }
 
   /**
@@ -290,16 +323,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Patient
    */
-  public createPatient(patient: Patient): Observable<Patient> {
+  public createPatient(patient: Patient): Promise<void> {
     if (!(patient instanceof Patient)) {
       throw new Error('Parameter is not instance of Patient class');
     }
-    return this.httpClient
-      .put<PatientDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/patients`,
-        patient.toDto()
-      )
-      .pipe(map((dto) => new Patient(dto)));
+    const dto = patient.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('patients').doc<PatientDto>(id).set(dto);
   }
 
   /**
@@ -312,15 +343,14 @@ export class ApiConnectionService {
    * @returns The complete updated Patient object
    */
   public editPatient(
-    id: number,
+    id: string,
     updatedPatient: RecursivePartial<Patient>
-  ): Observable<Patient> {
-    return this.httpClient
-      .post<PatientDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/patients/${id}`,
-        Patient.partialToDto(updatedPatient)
-      )
-      .pipe(map((dto) => new Patient(dto)));
+  ): Promise<void> {
+    const dto = Helper.partialToDto(updatedPatient);
+    return this.firestore
+      .collection('patients')
+      .doc<RecursivePartial<Patient>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -329,12 +359,8 @@ export class ApiConnectionService {
    *
    * @returns deleted Patient object
    */
-  public deletePatient(id: number): Observable<Patient> {
-    return this.httpClient
-      .delete<PatientDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/patients/${id}`
-      )
-      .pipe(map((dto) => new Patient(dto)));
+  public deletePatient(id: string): Promise<void> {
+    return this.firestore.collection('patients').doc(id).delete();
   }
 
   /**
@@ -343,11 +369,18 @@ export class ApiConnectionService {
    * @returns List of Stations
    */
   public getStations(): Observable<Station[]> {
-    return this.httpClient
-      .get<StationDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/stations`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Station(dto))));
+    return this.firestore
+      .collection<StationDto>('stations')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Station(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -356,12 +389,18 @@ export class ApiConnectionService {
    *
    * @returns single Station
    */
-  public getStationById(id: number): Observable<Station> {
-    return this.httpClient
-      .get<StationDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/stations/${id}`
-      )
-      .pipe(map((dto) => new Station(dto)));
+  public getStationById(id: string): Observable<Station> {
+    return this.firestore
+      .collection('stations')
+      .doc<StationDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Station(dto);
+        })
+      );
   }
 
   /**
@@ -370,16 +409,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Station
    */
-  public createStation(station: Station): Observable<Station> {
+  public createStation(station: Station): Promise<void> {
     if (!(station instanceof Station)) {
       throw new Error('Parameter is not instance of class Station');
     }
-    return this.httpClient
-      .put<StationDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/stations`,
-        station.toDto()
-      )
-      .pipe(map((dto) => new Station(dto)));
+    const dto = station.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('stations').doc<StationDto>(id).set(dto);
   }
 
   /**
@@ -392,15 +429,14 @@ export class ApiConnectionService {
    * @returns The complete updated Station object
    */
   public editStation(
-    id: number,
+    id: string,
     updatedStation: RecursivePartial<Station>
-  ): Observable<Station> {
-    return this.httpClient
-      .post<StationDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/stations/${id}`,
-        Station.partialToDto(updatedStation)
-      )
-      .pipe(map((dto) => new Station(dto)));
+  ): Promise<void> {
+    const dto = Helper.partialToDto(updatedStation);
+    return this.firestore
+      .collection('stations')
+      .doc<RecursivePartial<Station>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -409,12 +445,8 @@ export class ApiConnectionService {
    *
    * @returns deleted Station object
    */
-  public deleteStation(id: number): Observable<Station> {
-    return this.httpClient
-      .delete<StationDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/stations/${id}`
-      )
-      .pipe(map((dto) => new Station(dto)));
+  public deleteStation(id: string): Promise<void> {
+    return this.firestore.collection('stations').doc(id).delete();
   }
 
   /**
@@ -423,11 +455,18 @@ export class ApiConnectionService {
    * @returns List of Shifts
    */
   public getShifts(): Observable<Shift[]> {
-    return this.httpClient
-      .get<ShiftDto[]>(
-        `${environment.apiHost}${environment.apiEndpoint}/shifts`
-      )
-      .pipe(map((dtoArr) => dtoArr.map((dto) => new Shift(dto))));
+    return this.firestore
+      .collection<ShiftDto>('shifts')
+      .snapshotChanges()
+      .pipe(
+        map((snapshot) =>
+          snapshot.map((documentSnap) => {
+            const dto = documentSnap.payload.doc.data();
+            dto.id = documentSnap.payload.doc.id;
+            return new Shift(dto);
+          })
+        )
+      );
   }
 
   /**
@@ -436,12 +475,18 @@ export class ApiConnectionService {
    *
    * @returns single Shift
    */
-  public getShiftById(id: number): Observable<Shift> {
-    return this.httpClient
-      .get<ShiftDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/shifts/${id}`
-      )
-      .pipe(map((dto) => new Shift(dto)));
+  public getShiftById(id: string): Observable<Shift> {
+    return this.firestore
+      .collection('shifts')
+      .doc<ShiftDto>(id)
+      .snapshotChanges()
+      .pipe(
+        map((documentSnap) => {
+          const dto = documentSnap.payload.data();
+          dto.id = documentSnap.payload.id;
+          return new Shift(dto);
+        })
+      );
   }
 
   /**
@@ -450,16 +495,14 @@ export class ApiConnectionService {
    *
    * @returns newly created Shift
    */
-  public createShift(shift: Shift): Observable<Shift> {
+  public createShift(shift: Shift): Promise<void> {
     if (!(shift instanceof Shift)) {
       throw new Error('Parameter is not instance of Shift class');
     }
-    return this.httpClient
-      .put<ShiftDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/shifts`,
-        shift.toDto()
-      )
-      .pipe(map((dto) => new Shift(dto)));
+    const dto = shift.toDto();
+    const id = this.firestore.createId();
+    dto.id = id;
+    return this.firestore.collection('shifts').doc<ShiftDto>(id).set(dto);
   }
 
   /**
@@ -472,15 +515,14 @@ export class ApiConnectionService {
    * @returns The complete updated Shift object
    */
   public editShift(
-    id: number,
+    id: string,
     updatedShift: RecursivePartial<Shift>
-  ): Observable<Shift> {
-    return this.httpClient
-      .post<ShiftDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/shifts/${id}`,
-        Shift.partialToDto(updatedShift)
-      )
-      .pipe(map((dto) => new Shift(dto)));
+  ): Promise<void> {
+    const dto = Helper.partialToDto(updatedShift);
+    return this.firestore
+      .collection('shifts')
+      .doc<RecursivePartial<Shift>>(id)
+      .set(dto, { merge: true });
   }
 
   /**
@@ -489,11 +531,7 @@ export class ApiConnectionService {
    *
    * @returns deleted Shift object
    */
-  public deleteShift(id: number): Observable<Shift> {
-    return this.httpClient
-      .delete<ShiftDto>(
-        `${environment.apiHost}${environment.apiEndpoint}/shifts/${id}`
-      )
-      .pipe(map((dto) => new Shift(dto)));
+  public deleteShift(id: string): Promise<void> {
+    return this.firestore.collection('shifts').doc(id).delete();
   }
 }

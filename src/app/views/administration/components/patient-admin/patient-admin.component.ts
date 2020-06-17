@@ -8,7 +8,6 @@ import { Shift } from 'src/app/shared/models/shift.model';
 import { subscribeOn } from 'rxjs/operators';
 import { Patient } from 'src/app/shared/models/patient.model';
 
-
 @Component({
   selector: 'app-patient-admin',
   templateUrl: './patient-admin.component.html',
@@ -18,7 +17,6 @@ export class PatientAdminComponent implements OnInit {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   patients: Patient[] = [];
   patientsTableDataSource = new MatTableDataSource<Patient>();
-  
 
   constructor(
     private patientAdminService: AdministrationService,
@@ -36,7 +34,7 @@ export class PatientAdminComponent implements OnInit {
       width: '250px',
       data: obj,
     });
-    
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event == 'neuer Patient') {
         this.addRowData(result.data);
@@ -44,28 +42,28 @@ export class PatientAdminComponent implements OnInit {
         this.updateRowData(result.data);
       } else if (result.event == 'löschen') {
         this.deleteRowData(result.data);
-      } 
+      }
     });
   }
 
   addRowData(row_obj) {
     console.log('add row');
-    this.patientAdminService.createPatient(row_obj).subscribe(() => {
+    this.patientAdminService.createPatient(row_obj).then(() => {
       this.refresh();
     });
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.patientAdminService.editPatient(row_obj.id, row_obj).subscribe(() => {
+    this.patientAdminService.editPatient(row_obj.id, row_obj).then(() => {
       this.refresh();
     });
   }
   deleteRowData(row_obj) {
-    this.patientAdminService.deletePatient(row_obj.id).subscribe(() => {
+    this.patientAdminService.deletePatient(row_obj.id).then(() => {
       this.refresh();
     });
   }
- 
+
   refresh() {
     this.patientAdminService.getPatients().subscribe((data: Patient[]) => {
       console.log('refresh data');

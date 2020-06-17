@@ -17,7 +17,6 @@ export class CleanersAdminComponent implements OnInit {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   cleaners: Cleaner[] = [];
   cleanersTableDataSource = new MatTableDataSource<Cleaner>();
-  
 
   constructor(
     private cleanerAdminService: AdministrationService,
@@ -37,7 +36,7 @@ export class CleanersAdminComponent implements OnInit {
       width: '250px',
       data: obj,
     });
-    
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event == 'neue Reinigung') {
         this.addRowData(result.data);
@@ -53,18 +52,18 @@ export class CleanersAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.cleanerAdminService.createCleaner(row_obj).subscribe(() => {
+    this.cleanerAdminService.createCleaner(row_obj).then(() => {
       this.refresh();
     });
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.cleanerAdminService.editCleaner(row_obj.id, row_obj).subscribe(() => {
+    this.cleanerAdminService.editCleaner(row_obj.id, row_obj).then(() => {
       this.refresh();
     });
   }
   deleteRowData(row_obj) {
-    this.cleanerAdminService.deleteCleaner(row_obj.id).subscribe(() => {
+    this.cleanerAdminService.deleteCleaner(row_obj.id).then(() => {
       this.refresh();
     });
   }
@@ -73,20 +72,21 @@ export class CleanersAdminComponent implements OnInit {
     console.log('neue Schicht am: ', row_obj.Date);
     console.log('neue Schicht von: ', row_obj.id);
     const newShift = new Shift({
-      id: -1,
+      id: 'tempID',
       from: row_obj.Date.toISOString(),
       to: row_obj.Date.toISOString(),
-      cleaner: this.cleaners.find((cleaner) => cleaner.id === row_obj.id).toDto(),
+      cleaner: this.cleaners
+        .find((cleaner) => cleaner.id === row_obj.id)
+        .toDto(),
       doc: null,
       helper: null,
       station: null,
     });
 
-    this.cleanerAdminService.createShift(newShift).subscribe(() => {
+    this.cleanerAdminService.createShift(newShift).then(() => {
       this.refresh();
     });
   }
-
 
   refresh() {
     this.cleanerAdminService.getCleaners().subscribe((data: Cleaner[]) => {

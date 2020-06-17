@@ -6,68 +6,65 @@ import { Shift } from 'src/app/shared/models/shift.model';
 import { Cleaner } from 'src/app/shared/models/cleaner.model';
 import { Helper } from 'src/app/shared/models/helper.model';
 import { Patient } from 'src/app/shared/models/patient.model';
-import { Station } from 'src/app/shared/models/station.model';
 
 @Injectable()
 export class AdministrationService {
   constructor(private apiConnection: ApiConnectionService) {}
 
-  public getShifts(): Observable<Doctor[]> {
-    const doctors = this.apiConnection.getDoctors();
-    return doctors;
+  public getDoctors(): Observable<Doctor[]> {
+    return this.apiConnection.getDoctors();
   }
 
   public getCleaners(): Observable<Cleaner[]> {
-    const cleaners = this.apiConnection.getCleaners();
-    return cleaners;
+    return this.apiConnection.getCleaners();
   }
 
   public getHelpers(): Observable<Helper[]> {
-    const helpers = this.apiConnection.getHelpers();
-    return helpers;
+    return this.apiConnection.getHelpers();
   }
 
   public getPatients(): Observable<Patient[]> {
-    const patients = this.apiConnection.getPatients();
-    return patients;
+    return this.apiConnection.getPatients();
   }
 
-  public deleteDoc(id: number) {
+  public deleteDoc(id: string) {
     return this.apiConnection.deleteDoctor(id);
   }
 
-  public deleteCleaner(id: number) {
+  public deleteCleaner(id: string) {
     return this.apiConnection.deleteCleaner(id);
   }
 
-  public deleteHelper(id: number) {
+  public deleteHelper(id: string) {
     return this.apiConnection.deleteHelper(id);
   }
 
-  public deletePatient(id: number) {
+  public deletePatient(id: string) {
     return this.apiConnection.deletePatient(id);
   }
 
-  public editDoc(id: number, doc: Doctor) {
+  public editDoc(id: string, doc: Doctor) {
     return this.apiConnection.editDoctor(id, {
       name: doc.name,
       profession: doc.profession,
       surname: doc.surname,
     });
   }
-  public editCleaner(id: number, cleaner: Cleaner) {
+
+  public editCleaner(id: string, cleaner: Cleaner) {
     return this.apiConnection.editCleaner(id, {
       name: cleaner.name,
       surname: cleaner.surname,
     });
   }
-  public editHelper(id: number, helper: Helper) {
+
+  public editHelper(id: string, helper: Helper) {
     return this.apiConnection.editHelper(id, {
       name: helper.name,
       surname: helper.surname,
     });
   }
-  public editPatient(id: number, patient: Patient) {
+  public editPatient(id: string, patient: Patient) {
     return this.apiConnection.editPatient(id, {
       name: patient.name,
       surname: patient.surname,
@@ -76,7 +73,7 @@ export class AdministrationService {
 
   public createDoc(doc: Doctor) {
     const newDoc = new Doctor({
-      id: 9,
+      id: 'tempID',
       name: doc.name,
       profession: doc.profession,
       surname: doc.surname,
@@ -86,7 +83,7 @@ export class AdministrationService {
 
   public createCleaner(cleaner: Cleaner) {
     const newCleaner = new Cleaner({
-      id: 9,
+      id: 'tempID',
       name: cleaner.name,
       surname: cleaner.surname,
     });
@@ -95,7 +92,7 @@ export class AdministrationService {
 
   public createHelper(helper: Helper) {
     const newHelper = new Helper({
-      id: 9,
+      id: 'tempID',
       name: helper.name,
       surname: helper.surname,
     });
@@ -105,7 +102,7 @@ export class AdministrationService {
   // offen: Station Auswahl beim Anlegen in Dialog
   public createPatient(patient: Patient) {
     const newPatient = new Patient({
-      id: 9,
+      id: 'tempID',
       name: patient.name,
       surname: patient.surname,
       station: null,
@@ -114,14 +111,14 @@ export class AdministrationService {
   }
 
   public createShift(shift: Shift) {
-    var toDate = new Date;
-   
+    var toDate = new Date();
+
     toDate.setDate(shift.from.getDate() + 1);
     console.log('from: ', shift.from);
     console.log('toDate: ', toDate);
 
     const newShift = new Shift({
-      id: -1,
+      id: 'tempID',
       from: shift.from.toISOString(),
 
       to: toDate.toISOString(),

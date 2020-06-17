@@ -1,13 +1,13 @@
 import { RecursivePartial } from './partial.model';
 
 export interface HelperDto {
-  id: number;
+  id: string;
   name: string;
   surname: string;
 }
 
 export class Helper {
-  public readonly id: number;
+  public readonly id: string;
   public name: string;
   public surname: string;
 

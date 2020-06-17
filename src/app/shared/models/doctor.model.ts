@@ -1,14 +1,14 @@
 import { RecursivePartial } from './partial.model';
 
 export interface DoctorDto {
-  id: number;
+  id: string;
   name: string;
   surname: string;
   profession: string;
 }
 
 export class Doctor {
-  public readonly id: number;
+  public readonly id: string;
   public name: string;
   public surname: string;
   public profession: string;
