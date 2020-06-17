@@ -17,6 +17,13 @@ body {
     padding: 16px;
 }
 
+.center-card {
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .mat-table {
     display: table;
     width: 100%;

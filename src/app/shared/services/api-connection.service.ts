@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Doctor, DoctorDto } from '../models/doctor.model';
-import { environment } from 'src/environments/environment';
 import { Patient, PatientDto } from '../models/patient.model';
 import { map } from 'rxjs/operators';
 import { Helper, HelperDto } from '../models/helper.model';
@@ -12,11 +10,30 @@ import { Shift, ShiftDto } from '../models/shift.model';
 import { RecursivePartial } from '../models/partial.model';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+interface UserData {
+  email: string;
+  userGroup: string;
+  registrationDate: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiConnectionService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore) {
+    firestore.firestore.settings({
+      ignoreUndefinedProperties: true,
+    });
+  }
+
+  public getUserData(uid: string): Promise<UserData> {
+    return this.firestore
+      .collection('users')
+      .doc(uid)
+      .get()
+      .toPromise()
+      .then((data) => data.data() as UserData);
+  }
 
   /**
    * Returns a stream of all Doctors

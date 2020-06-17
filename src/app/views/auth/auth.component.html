@@ -1,0 +1,28 @@
+<div class="page-body">
+    <form (submit)="login()" [formGroup]="formGroup">
+        <mat-card class="center-card" style="width: 300px;">
+            <mat-card-header>
+                <mat-card-title>{{isLogin ? 'Login' : 'Signup'}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content fxLayout="column" fxLayoutGap="12px">
+                <mat-form-field>
+                    <mat-label>E-Mail</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="E-Mail">
+                    <mat-error *ngIf="formGroup.get('email').invalid">Ungültige Email Adresse</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Passwort</mat-label>
+                    <input matInput type="password" formControlName="password" placeholder="Passwort">
+                    <mat-error *ngIf="formGroup.get('password').invalid">Passwort muss mindestens 6 Zeichen
+                        lang sein</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
+                <button mat-raised-button type="submit" color="primary"
+                    [disabled]="formGroup.invalid">{{isLogin ? 'LOGIN' : 'SIGNUP'}}</button>
+                <button mat-button type="button" color="primary"
+                    (click)="isLogin = !isLogin">{{isLogin ? 'Account Erstellen' : 'Zurück zum Login'}}</button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>
