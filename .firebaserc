@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "corona-medical-service"
+  },
+  "targets": {
+    "corona-medical-service": {
+      "hosting": {
+        "frontend": [
+          "corona-medical-service"
+        ]
+      }
+    }
+  }
+}
