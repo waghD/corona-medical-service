@@ -1,28 +1,30 @@
 # corona-medical-service
-Service Engineering UE4
+
+Service Engineering UE5
+
+Der Code für die UE4 befindet sich in dem Branch ue4!
+Der Masterbranch wurde für die UE5 fortgesetzt.
+
+#### Änderungen zu UE4
+
+- Backend wurde komplett gelöscht, stattdessen wird die API der Firestore datenbank verwendet
+- Projekt wurde umstrukturiert um ein reines Angular Frontend projekt darzustellen
+- Firebase cloud functions wurden im ordner functions/ hinzugefügt
 
 #### Vorraussetzungen:
- - MySQL server auf Port 3306 mit einer Datenbank namens "coronaDB" (Tabellen oder Daten müssen keine vorhanden sein)
- - Node.js installiert: [node.js](https://nodejs.org/en/)
- - Angular installiert mit `npm install -g @angular/cli`
- - Nest installiert mit `npm install -g @nestjs/cli`
 
-#### Installation
+- Node.js installiert: [node.js](https://nodejs.org/en/)
+- Angular installiert mit `npm install -g @angular/cli`
 
-Commandline in dem Ordner Backend öffnen
- - `npm install`
- - `npm run start` (Hier muss der MySQL server bereits auf Port 3306 laufen)
- 
-Commandline in dem Ordner Frontend öffnen
- - `npm install`
- - `ng serve`
+#### Installation für eine Lokale ausführung
 
-#### Die Resourcen
- 
-Der API Server startet auf [localhost:3000](http://localhost:3000)
+Commandline im project root öffnen
 
-Die Swagger Dokumentation der Api ist auf [/docs](http://localhost:3000/docs) zu finden.
-
-API endpoint ist [/api](http://localhost:3000/api)
+- `npm install`
+- `npm run start`
 
 Der Angular Webserver startet auf [localhost:4200](http://localhost:4200)
+
+#### Hosted Version
+
+Eine gehostete Version der Web App befindet sich [corona-medical-service.app](https://corona-medical-service.app/)
