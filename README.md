@@ -28,3 +28,8 @@ Der Angular Webserver startet auf [localhost:4200](http://localhost:4200)
 #### Hosted Version
 
 Eine gehostete Version der Web App befindet sich auf [corona-medical-service.web.app](https://corona-medical-service.web.app/)
+
+### Admin Testzugang
+
+E-Mail: admin@corona.at
+Passwort: admin123
