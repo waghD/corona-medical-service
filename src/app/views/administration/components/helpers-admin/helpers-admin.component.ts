@@ -1,37 +1,48 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { MatDialog } from '@angular/material/dialog';
 import { HelperDialogBoxComponent } from './dialog-box/helper-dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
-import { subscribeOn } from 'rxjs/operators';
 import { Helper } from 'src/app/shared/models/helper.model';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-helpers-admin',
   templateUrl: './helpers-admin.component.html',
   styleUrls: ['./helpers-admin.component.css'],
 })
-export class HelpersAdminComponent implements OnInit {
+export class HelpersAdminComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   helpers: Helper[] = [];
   helpersTableDataSource = new MatTableDataSource<Helper>();
 
+  private dataSub: Subscription;
+
   constructor(
     private helperAdminService: AdministrationService,
-    public dialog: MatDialog,
-    private changeDetectorRefs: ChangeDetectorRef
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.refresh();
-    // refresh funzt leider noch nicht wie es soll
-    // Lösungsidee: Redirect zur Homepage?
+    this.dataSub = this.helperAdminService
+      .getHelpers()
+      .subscribe((data: Helper[]) => {
+        this.helpers = data;
+        this.helpersTableDataSource.data = this.helpers;
+      });
   }
+
+  ngOnDestroy() {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
+  }
+
   openDialog(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(HelperDialogBoxComponent, {
-      width: '250px',
+      width: '300px',
       data: obj,
     });
 
@@ -50,20 +61,14 @@ export class HelpersAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.helperAdminService.createHelper(row_obj).then(() => {
-      this.refresh();
-    });
+    this.helperAdminService.createHelper(row_obj).then(() => {});
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.helperAdminService.editHelper(row_obj.id, row_obj).then(() => {
-      this.refresh();
-    });
+    this.helperAdminService.editHelper(row_obj.id, row_obj).then(() => {});
   }
   deleteRowData(row_obj) {
-    this.helperAdminService.deleteHelper(row_obj.id).then(() => {
-      this.refresh();
-    });
+    this.helperAdminService.deleteHelper(row_obj.id).then(() => {});
   }
 
   newShift(row_obj) {
@@ -79,17 +84,6 @@ export class HelpersAdminComponent implements OnInit {
       station: null,
     });
 
-    this.helperAdminService.createShift(newShift).then(() => {
-      this.refresh();
-    });
-  }
-
-  refresh() {
-    this.helperAdminService.getHelpers().subscribe((data: Helper[]) => {
-      console.log('refresh data');
-      this.helpers = data;
-      this.helpersTableDataSource.data = this.helpers;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this.helperAdminService.createShift(newShift).then(() => {});
   }
 }

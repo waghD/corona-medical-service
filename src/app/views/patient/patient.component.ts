@@ -1,28 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PatientService } from './patient.service';
 import { Patient } from 'src/app/shared/models/patient.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-patient',
   templateUrl: './patient.component.html',
   styleUrls: ['./patient.component.css'],
 })
-export class PatientComponent implements OnInit {
+export class PatientComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname'];
-  patients: Patient[] = [];
   patientsTableDataSource = new MatTableDataSource<Patient>();
+
+  private dataSub: Subscription;
+
   constructor(private patientsService: PatientService) {}
 
   ngOnInit() {
-    this.getPatients();
+    this.dataSub = this.patientsService
+      .getPatients()
+      .subscribe((data: Patient[]) => {
+        this.patientsTableDataSource.data = data;
+      });
   }
-  getPatients() {
-    this.patientsService.getPatients().subscribe((data: Patient[]) => {
-      console.log(data);
-      this.patients = data;
-      console.log('patients:', this.patients);
-      this.patientsTableDataSource.data = this.patients;
-    });
+
+  ngOnDestroy(): void {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 }

@@ -1,37 +1,48 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { MatDialog } from '@angular/material/dialog';
 import { PatientDialogBoxComponent } from './dialog-box/patient-dialog-box.component';
-import { Shift } from 'src/app/shared/models/shift.model';
-import { subscribeOn } from 'rxjs/operators';
 import { Patient } from 'src/app/shared/models/patient.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-patient-admin',
   templateUrl: './patient-admin.component.html',
   styleUrls: ['./patient-admin.component.css'],
 })
-export class PatientAdminComponent implements OnInit {
+export class PatientAdminComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   patients: Patient[] = [];
   patientsTableDataSource = new MatTableDataSource<Patient>();
 
+  private dataSub: Subscription;
+
   constructor(
     private patientAdminService: AdministrationService,
-    public dialog: MatDialog,
-    private changeDetectorRefs: ChangeDetectorRef
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.refresh();
+    this.dataSub = this.patientAdminService
+      .getPatients()
+      .subscribe((data: Patient[]) => {
+        this.patients = data;
+        this.patientsTableDataSource.data = this.patients;
+      });
+  }
+
+  ngOnDestroy() {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 
   openDialog(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(PatientDialogBoxComponent, {
-      width: '250px',
+      width: '300px',
       data: obj,
     });
 
@@ -48,28 +59,13 @@ export class PatientAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.patientAdminService.createPatient(row_obj).then(() => {
-      this.refresh();
-    });
+    this.patientAdminService.createPatient(row_obj).then(() => {});
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.patientAdminService.editPatient(row_obj.id, row_obj).then(() => {
-      this.refresh();
-    });
+    this.patientAdminService.editPatient(row_obj.id, row_obj).then(() => {});
   }
   deleteRowData(row_obj) {
-    this.patientAdminService.deletePatient(row_obj.id).then(() => {
-      this.refresh();
-    });
-  }
-
-  refresh() {
-    this.patientAdminService.getPatients().subscribe((data: Patient[]) => {
-      console.log('refresh data');
-      this.patients = data;
-      this.patientsTableDataSource.data = this.patients;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this.patientAdminService.deletePatient(row_obj.id).then(() => {});
   }
 }

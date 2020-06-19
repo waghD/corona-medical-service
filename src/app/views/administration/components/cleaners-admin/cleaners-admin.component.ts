@@ -1,39 +1,49 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { MatDialog } from '@angular/material/dialog';
 import { CleanerDialogBoxComponent } from './dialog-box/cleaner-dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
-import { subscribeOn } from 'rxjs/operators';
 import { Cleaner } from 'src/app/shared/models/cleaner.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cleaners-admin',
   templateUrl: './cleaners-admin.component.html',
   styleUrls: ['./cleaners-admin.component.css'],
 })
-export class CleanersAdminComponent implements OnInit {
+export class CleanersAdminComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname', 'actions'];
-  cleaners: Cleaner[] = [];
+  cleaners: Cleaner[];
   cleanersTableDataSource = new MatTableDataSource<Cleaner>();
+
+  private dataSub: Subscription;
 
   constructor(
     private cleanerAdminService: AdministrationService,
-    public dialog: MatDialog,
-    private changeDetectorRefs: ChangeDetectorRef
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.refresh();
-    // refresh funzt leider noch nicht wie es soll
-    // Lösungsidee: Redirect zur Homepage?
+    this.dataSub = this.cleanerAdminService
+      .getCleaners()
+      .subscribe((data: Cleaner[]) => {
+        this.cleaners = data;
+        this.cleanersTableDataSource.data = data;
+      });
+  }
+
+  ngOnDestroy() {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 
   openDialog(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(CleanerDialogBoxComponent, {
-      width: '250px',
+      width: '300px',
       data: obj,
     });
 
@@ -52,20 +62,14 @@ export class CleanersAdminComponent implements OnInit {
 
   addRowData(row_obj) {
     console.log('add row');
-    this.cleanerAdminService.createCleaner(row_obj).then(() => {
-      this.refresh();
-    });
+    this.cleanerAdminService.createCleaner(row_obj).then(() => {});
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.cleanerAdminService.editCleaner(row_obj.id, row_obj).then(() => {
-      this.refresh();
-    });
+    this.cleanerAdminService.editCleaner(row_obj.id, row_obj).then(() => {});
   }
   deleteRowData(row_obj) {
-    this.cleanerAdminService.deleteCleaner(row_obj.id).then(() => {
-      this.refresh();
-    });
+    this.cleanerAdminService.deleteCleaner(row_obj.id).then(() => {});
   }
 
   newShift(row_obj) {
@@ -83,17 +87,6 @@ export class CleanersAdminComponent implements OnInit {
       station: null,
     });
 
-    this.cleanerAdminService.createShift(newShift).then(() => {
-      this.refresh();
-    });
-  }
-
-  refresh() {
-    this.cleanerAdminService.getCleaners().subscribe((data: Cleaner[]) => {
-      console.log('refresh data');
-      this.cleaners = data;
-      this.cleanersTableDataSource.data = this.cleaners;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this.cleanerAdminService.createShift(newShift).then(() => {});
   }
 }

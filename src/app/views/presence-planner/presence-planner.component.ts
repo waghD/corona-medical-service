@@ -1,30 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PresencePlannerService } from './presence-planner.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Shift } from 'src/app/shared/models/shift.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-presence-planner',
   templateUrl: './presence-planner.component.html',
   styleUrls: ['./presence-planner.component.css'],
 })
-export class PresencePlannerComponent implements OnInit {
+export class PresencePlannerComponent implements OnInit, OnDestroy {
   displayedColumns = ['doc', 'from', 'to', 'station'];
-  shifts: Shift[] = [];
   shiftsTableDataSource = new MatTableDataSource<Shift>();
+
+  private dataSub: Subscription;
 
   constructor(private precenseService: PresencePlannerService) {}
 
   ngOnInit() {
-    this.getShifts();
+    this.dataSub = this.precenseService
+      .getShifts()
+      .subscribe((data: Shift[]) => {
+        this.shiftsTableDataSource.data = data;
+      });
   }
-  getShifts() {
-    //this.shifts = [];
-    this.precenseService.getShifts().subscribe((data: Shift[]) => {
-      console.log(data);
-      this.shifts = data;
-      console.log('shifts:', this.shifts);
-      this.shiftsTableDataSource.data = this.shifts;
-    });
+
+  ngOnDestroy(): void {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 }

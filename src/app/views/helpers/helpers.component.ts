@@ -1,28 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HelpersService } from './helpers.service';
 import { Helper } from 'src/app/shared/models/helper.model';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-helpers',
   templateUrl: './helpers.component.html',
   styleUrls: ['./helpers.component.css'],
 })
-export class HelpersComponent implements OnInit {
+export class HelpersComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname'];
-  helpers: Helper[] = [];
   helpersTableDataSource = new MatTableDataSource<Helper>();
+
+  private dataSub: Subscription;
+
   constructor(private helpersService: HelpersService) {}
 
   ngOnInit() {
-    this.getHelpers();
+    this.dataSub = this.helpersService
+      .getHelpers()
+      .subscribe((data: Helper[]) => {
+        this.helpersTableDataSource.data = data;
+      });
   }
-  getHelpers() {
-    this.helpersService.getHelpers().subscribe((data: Helper[]) => {
-      console.log(data);
-      this.helpers = data;
-      console.log('helpers:', this.helpers);
-      this.helpersTableDataSource.data = this.helpers;
-    });
+
+  ngOnDestroy() {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 }

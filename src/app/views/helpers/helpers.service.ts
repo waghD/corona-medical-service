@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from 'src/app/shared/services/api-connection.service';
 import { Helper } from 'src/app/shared/models/helper.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class HelpersService {
-  constructor(private apiConnection: ApiConnectionService) {}
+  private dataStream: Subject<Helper[]> = new BehaviorSubject<Helper[]>([]);
+
+  constructor(private apiConnection: ApiConnectionService) {
+    this.apiConnection
+      .getHelpers()
+      .subscribe((data) => this.dataStream.next(data));
+  }
 
   public getHelpers(): Observable<Helper[]> {
-    return this.apiConnection.getHelpers();
+    return this.dataStream.asObservable();
   }
 }

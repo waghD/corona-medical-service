@@ -1,0 +1,10 @@
+
+Functionalities:
+  ☐ Display Station in Patient table
+  ☐ Select station in patient create / edit
+  ☐ Select station in shift creation
+  ☐ Shift editor in admin area to delete / edit shifts
+  ☐ Home component displaying something
+
+Bugs:
+  ☐ Navigating to admin component without authentication navigates to access denied page instead of login

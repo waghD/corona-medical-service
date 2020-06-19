@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ApiConnectionService } from 'src/app/shared/services/api-connection.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { Patient } from 'src/app/shared/models/patient.model';
 
 @Injectable()
 export class PatientService {
-  constructor(private apiConnection: ApiConnectionService) {}
+  private dataStream: Subject<Patient[]> = new BehaviorSubject<Patient[]>([]);
+
+  constructor(private apiConnection: ApiConnectionService) {
+    this.apiConnection
+      .getPatients()
+      .subscribe((data) => this.dataStream.next(data));
+  }
 
   public getPatients(): Observable<Patient[]> {
-    return this.apiConnection.getPatients();
+    return this.dataStream.asObservable();
   }
 }

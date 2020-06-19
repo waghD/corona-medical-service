@@ -25,7 +25,9 @@ export class Patient {
     this.id = dto.id;
     this.name = dto.name;
     this.surname = dto.surname;
-    this.station = new Station(dto.station);
+    if (dto.station) {
+      this.station = new Station(dto.station);
+    }
   }
 
   toDto(): PatientUploadDto {

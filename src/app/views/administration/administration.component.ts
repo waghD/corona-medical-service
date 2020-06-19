@@ -19,7 +19,7 @@ export class AdministrationComponent implements OnInit {
   // Hack um Enum in HTML Template zu verwenden
   adminComponentTypes = AdminComponentTypes;
 
-  constructor(private adminService: AdministrationService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

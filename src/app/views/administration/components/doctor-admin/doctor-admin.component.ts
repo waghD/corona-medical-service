@@ -1,35 +1,48 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AdministrationService } from '../../administration.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Doctor } from 'src/app/shared/models/doctor.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-admin',
   templateUrl: './doctor-admin.component.html',
   styleUrls: ['./doctor-admin.component.css'],
 })
-export class DoctorAdminComponent implements OnInit {
+export class DoctorAdminComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'name', 'surname', 'profession', 'actions'];
   doctors: Doctor[] = [];
   doctorsTableDataSource = new MatTableDataSource<Doctor>();
 
+  private dataSub: Subscription;
+
   constructor(
     private doctorAdminService: AdministrationService,
-    public dialog: MatDialog,
-    private changeDetectorRefs: ChangeDetectorRef
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.refresh();
+    this.dataSub = this.doctorAdminService
+      .getDoctors()
+      .subscribe((data: Doctor[]) => {
+        this.doctors = data;
+        this.doctorsTableDataSource.data = this.doctors;
+      });
+  }
+
+  ngOnDestroy() {
+    if (!this.dataSub.closed) {
+      this.dataSub.unsubscribe();
+    }
   }
 
   openDialog(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: '250px',
+      width: '300px',
       data: obj,
     });
 
@@ -49,20 +62,14 @@ export class DoctorAdminComponent implements OnInit {
   addRowData(row_obj) {
     console.log('add row');
     console.log('row_obj: ', row_obj);
-    this.doctorAdminService.createDoc(row_obj).then(() => {
-      this.refresh();
-    });
+    this.doctorAdminService.createDoc(row_obj).then(() => {});
   }
   updateRowData(row_obj) {
     console.log('update');
-    this.doctorAdminService.editDoc(row_obj.id, row_obj).then(() => {
-      this.refresh();
-    });
+    this.doctorAdminService.editDoc(row_obj.id, row_obj).then(() => {});
   }
   deleteRowData(row_obj) {
-    this.doctorAdminService.deleteDoc(row_obj.id).then(() => {
-      this.refresh();
-    });
+    this.doctorAdminService.deleteDoc(row_obj.id).then(() => {});
   }
 
   newShift(row_obj) {
@@ -78,17 +85,6 @@ export class DoctorAdminComponent implements OnInit {
       station: null,
     });
 
-    this.doctorAdminService.createShift(newShift).then(() => {
-      this.refresh();
-    });
-  }
-
-  refresh() {
-    this.doctorAdminService.getDoctors().subscribe((data: Doctor[]) => {
-      console.log('refresh data');
-      this.doctors = data;
-      this.doctorsTableDataSource.data = this.doctors;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this.doctorAdminService.createShift(newShift).then(() => {});
   }
 }
