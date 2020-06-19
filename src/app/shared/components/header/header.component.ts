@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
 enum Routes {
+  AUTH,
   HOME,
   PATIENT,
   DOCTORS,
@@ -24,10 +26,18 @@ export class HeaderComponent implements OnInit {
   // Hack for acces to Routes enum in HTML template
   routes = Routes;
 
-  constructor(private router: Router) {
+  routesDisabled: boolean = true;
+
+  constructor(private router: Router, private auth: AuthService) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects.includes('auth')) {
+          this.activeRoute = Routes.AUTH;
+          this.routesDisabled = true;
+          return;
+        }
+        this.routesDisabled = false;
         if (event.urlAfterRedirects.includes('home')) {
           this.activeRoute = Routes.HOME;
           return;
@@ -61,4 +71,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  logout() {
+    this.auth.logout().then(() => this.router.navigateByUrl('/'));
+  }
 }

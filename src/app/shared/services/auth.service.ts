@@ -44,4 +44,8 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then((user) => !!user.user);
   }
+
+  public logout(): Promise<void> {
+    return this.auth.signOut();
+  }
 }
