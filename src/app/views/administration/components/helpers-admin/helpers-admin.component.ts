@@ -7,12 +7,15 @@ import { HelperDialogBoxComponent } from './dialog-box/helper-dialog-box.compone
 import { Shift } from 'src/app/shared/models/shift.model';
 import { Helper } from 'src/app/shared/models/helper.model';
 import { Subscription } from 'rxjs';
+import { DialogData, OperationTypes } from '../operations';
 @Component({
   selector: 'app-helpers-admin',
   templateUrl: './helpers-admin.component.html',
   styleUrls: ['./helpers-admin.component.css'],
 })
 export class HelpersAdminComponent implements OnInit, OnDestroy {
+  operations = OperationTypes;
+
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   helpers: Helper[] = [];
   helpersTableDataSource = new MatTableDataSource<Helper>();
@@ -39,51 +42,44 @@ export class HelpersAdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(action, obj) {
-    obj.action = action;
+  openDialog(action: OperationTypes, obj?: Helper) {
+    const dialogData: DialogData<Helper> = {
+      action,
+      data: obj,
+    };
+
     const dialogRef = this.dialog.open(HelperDialogBoxComponent, {
       width: '300px',
-      data: obj,
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event == 'neues Pflegepersonal') {
-        this.addRowData(result.data);
-      } else if (result.event == 'bearbeiten') {
-        this.updateRowData(result.data);
-      } else if (result.event == 'löschen') {
-        this.deleteRowData(result.data);
-      } else if (result.event == 'neue Schicht') {
-        this.newShift(result.data);
+    dialogRef.afterClosed().subscribe((result: DialogData<Helper | Shift>) => {
+      if (result.action === OperationTypes.CREATE) {
+        this.addRowData(result.data as Helper);
+      } else if (result.action === OperationTypes.UPDATE) {
+        this.updateRowData(result.data as Helper);
+      } else if (result.action === OperationTypes.DELETE) {
+        this.deleteRowData(result.data as Helper);
+      } else if (result.action === OperationTypes.ADD) {
+        this.newShift(result.data as Shift);
       }
     });
   }
 
-  addRowData(row_obj) {
+  addRowData(helper: Helper) {
     console.log('add row');
-    this.helperAdminService.createHelper(row_obj).then(() => {});
+    this.helperAdminService.createHelper(helper).then(() => {});
   }
-  updateRowData(row_obj) {
+  updateRowData(helper: Helper) {
     console.log('update');
-    this.helperAdminService.editHelper(row_obj.id, row_obj).then(() => {});
+    this.helperAdminService.editHelper(helper.id, helper).then(() => {});
   }
-  deleteRowData(row_obj) {
-    this.helperAdminService.deleteHelper(row_obj.id).then(() => {});
+  deleteRowData(helper: Helper) {
+    this.helperAdminService.deleteHelper(helper.id).then(() => {});
   }
 
-  newShift(row_obj) {
-    console.log('neue Schicht am: ', row_obj.Date);
-    console.log('neue Schicht von: ', row_obj.id);
-    const newShift = new Shift({
-      id: 'tempID',
-      from: row_obj.Date.toISOString(),
-      to: row_obj.Date.toISOString(),
-      cleaner: null,
-      doc: null,
-      helper: this.helpers.find((helper) => helper.id === row_obj.id).toDto(),
-      station: null,
-    });
-
-    this.helperAdminService.createShift(newShift).then(() => {});
+  newShift(shift: Shift) {
+    console.log('Add shift: ', shift);
+    this.helperAdminService.createShift(shift).then(() => {});
   }
 }

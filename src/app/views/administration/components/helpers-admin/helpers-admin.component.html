@@ -1,34 +1,39 @@
 <div class="page-body">
-    <button mat-button (click)="openDialog('neues Pflegepersonal',{})" mat-flat-button color="primary">neues Pflegepersonal</button>
+    <button mat-button (click)="openDialog(operations.CREATE)" mat-flat-button color="primary">
+        Neues Pflegepersonal
+    </button>
     <table mat-table [dataSource]="helpersTableDataSource">
         <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>ID </th>      
+            <th mat-header-cell *matHeaderCellDef>ID </th>
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
         <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Vorname </th>      
+            <th mat-header-cell *matHeaderCellDef>Vorname </th>
             <td mat-cell *matCellDef="let element">{{element?.name || "-"}} </td>
         </ng-container>
         <ng-container matColumnDef="surname">
-            <th mat-header-cell *matHeaderCellDef>Nachname </th>      
+            <th mat-header-cell *matHeaderCellDef>Nachname </th>
             <td mat-cell *matCellDef="let element">{{element?.surname || "-"}} </td>
         </ng-container>
-  
-       
-          <ng-container matColumnDef="actions">
+
+
+        <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef>Administration </mat-header-cell>
             <mat-cell *matCellDef="let element">
-              <button mat-icon-button (click)="openDialog('bearbeiten',element)" matTooltip="Click to Edit" class="iconbutton" color="primary">
-                  <mat-icon aria-label="Edit">edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="openDialog('löschen',element)" matTooltip="Click to Delete" class="iconbutton" color="warn">
-                  <mat-icon aria-label="Delete">delete</mat-icon>
-              </button>
-              <button mat-icon-button (click)="openDialog('neue Schicht',element)" matTooltip="Click to add shift" class="iconbutton" color="primary">
-                <mat-icon aria-label="Add">add</mat-icon>
-            </button>
+                <button mat-icon-button (click)="openDialog(operations.UPDATE ,element)" matTooltip="Click to Edit"
+                    class="iconbutton" color="primary">
+                    <mat-icon aria-label="Edit">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="openDialog(operations.DELETE,element)" matTooltip="Click to Delete"
+                    class="iconbutton" color="warn">
+                    <mat-icon aria-label="Delete">delete</mat-icon>
+                </button>
+                <button mat-icon-button (click)="openDialog(operations.ADD,element)" matTooltip="Click to add shift"
+                    class="iconbutton" color="primary">
+                    <mat-icon aria-label="Add">add</mat-icon>
+                </button>
             </mat-cell>
-          </ng-container>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
