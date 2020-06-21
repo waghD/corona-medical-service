@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PatientDialogBoxComponent } from './dialog-box/patient-dialog-box.component';
 import { Patient } from 'src/app/shared/models/patient.model';
 import { Subscription } from 'rxjs';
+import { OperationTypes, DialogData } from '../operations';
 
 @Component({
   selector: 'app-patient-admin',
@@ -13,6 +14,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./patient-admin.component.css'],
 })
 export class PatientAdminComponent implements OnInit, OnDestroy {
+  operations = OperationTypes;
+
   displayedColumns = ['id', 'name', 'surname', 'station', 'actions'];
   patients: Patient[] = [];
   patientsTableDataSource = new MatTableDataSource<Patient>();
@@ -39,33 +42,36 @@ export class PatientAdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(action, obj) {
-    obj.action = action;
+  openDialog(action: OperationTypes, obj?: Patient) {
+    const dialogData: DialogData<Patient> = {
+      action,
+      data: obj,
+    };
     const dialogRef = this.dialog.open(PatientDialogBoxComponent, {
       width: '300px',
-      data: obj,
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event == 'neuer Patient') {
+    dialogRef.afterClosed().subscribe((result: DialogData<Patient>) => {
+      if (result.action == OperationTypes.CREATE) {
         this.addRowData(result.data);
-      } else if (result.event == 'bearbeiten') {
+      } else if (result.action == OperationTypes.UPDATE) {
         this.updateRowData(result.data);
-      } else if (result.event == 'löschen') {
+      } else if (result.action == OperationTypes.DELETE) {
         this.deleteRowData(result.data);
       }
     });
   }
 
-  addRowData(row_obj) {
-    console.log('add row');
-    this.patientAdminService.createPatient(row_obj).then(() => {});
+  addRowData(patient: Patient) {
+    console.log('add row: ', patient);
+    this.patientAdminService.createPatient(patient).then(() => {});
   }
-  updateRowData(row_obj) {
-    console.log('update');
-    this.patientAdminService.editPatient(row_obj.id, row_obj).then(() => {});
+  updateRowData(patient: Patient) {
+    console.log('update: ', patient);
+    this.patientAdminService.editPatient(patient.id, patient).then(() => {});
   }
-  deleteRowData(row_obj) {
-    this.patientAdminService.deletePatient(row_obj.id).then(() => {});
+  deleteRowData(patient: Patient) {
+    this.patientAdminService.deletePatient(patient.id).then(() => {});
   }
 }

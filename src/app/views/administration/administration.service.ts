@@ -109,6 +109,7 @@ export class AdministrationService {
     return this.apiConnection.editPatient(id, {
       name: patient.name,
       surname: patient.surname,
+      station: patient.station,
     });
   }
 
@@ -119,41 +120,19 @@ export class AdministrationService {
   }
 
   public createDoc(doc: Doctor): Promise<void> {
-    const newDoc = new Doctor({
-      id: 'tempID',
-      name: doc.name,
-      profession: doc.profession,
-      surname: doc.surname,
-    });
-    return this.apiConnection.createDoctor(newDoc);
+    return this.apiConnection.createDoctor(doc);
   }
 
   public createCleaner(cleaner: Cleaner): Promise<void> {
-    const newCleaner = new Cleaner({
-      id: 'tempID',
-      name: cleaner.name,
-      surname: cleaner.surname,
-    });
-    return this.apiConnection.createCleaner(newCleaner);
+    return this.apiConnection.createCleaner(cleaner);
   }
 
   public createHelper(helper: Helper): Promise<void> {
-    const newHelper = new Helper({
-      id: 'tempID',
-      name: helper.name,
-      surname: helper.surname,
-    });
-    return this.apiConnection.createHelper(newHelper);
+    return this.apiConnection.createHelper(helper);
   }
 
   public createPatient(patient: Patient): Promise<void> {
-    const newPatient = new Patient({
-      id: 'tempID',
-      name: patient.name,
-      surname: patient.surname,
-      station: null,
-    });
-    return this.apiConnection.createPatient(newPatient);
+    return this.apiConnection.createPatient(patient);
   }
 
   public createStation(station: Station): Promise<void> {
@@ -161,23 +140,6 @@ export class AdministrationService {
   }
 
   public createShift(shift: Shift): Promise<void> {
-    var toDate = new Date();
-    toDate.setDate(shift.from.getDate() + 1);
-    console.log('from: ', shift.from);
-    console.log('toDate: ', toDate);
-
-    const newShift = new Shift({
-      id: 'tempID',
-      from: shift.from.toISOString(),
-
-      to: toDate.toISOString(),
-
-      cleaner: shift.cleaner,
-      doc: shift.doc,
-      helper: shift.helper,
-      station: shift.station,
-    });
-    console.log('newShift: ', newShift);
-    return this.apiConnection.createShift(newShift);
+    return this.apiConnection.createShift(shift);
   }
 }

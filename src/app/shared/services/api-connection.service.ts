@@ -363,7 +363,7 @@ export class ApiConnectionService {
     id: string,
     updatedPatient: RecursivePartial<Patient>
   ): Promise<void> {
-    const dto = Helper.partialToDto(updatedPatient);
+    const dto = Patient.partialToDto(updatedPatient);
     return this.firestore
       .collection('patients')
       .doc<RecursivePartial<Patient>>(id)

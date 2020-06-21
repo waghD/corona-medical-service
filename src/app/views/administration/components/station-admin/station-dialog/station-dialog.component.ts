@@ -41,13 +41,20 @@ export class StationDialogComponent implements OnInit {
         this.actionLabel = 'Station';
         break;
     }
+    if (this.station) {
+      this.stationName = this.station.station;
+    }
   }
 
   ngOnInit(): void {}
 
   doAction() {
-    const station = new Station({ id: 'temp', station: this.stationName });
-    this.dialogRef.close({ action: this.action, data: station });
+    if (!this.station) {
+      this.station = new Station({ id: 'temp', station: this.stationName });
+    } else {
+      this.station.station = this.stationName;
+    }
+    this.dialogRef.close({ action: this.action, data: this.station });
   }
 
   closeDialog() {

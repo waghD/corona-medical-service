@@ -1,5 +1,5 @@
 <div class="page-body">
-    <button mat-button (click)="openDialog('neuer Patient',{})" mat-flat-button color="primary">neuer Patient</button>
+    <button mat-button (click)="openDialog(operations.CREATE)" mat-flat-button color="primary">neuer Patient</button>
     <table mat-table [dataSource]="patientsTableDataSource">
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>ID </th>
@@ -22,11 +22,11 @@
         <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef>Administration </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button mat-icon-button (click)="openDialog('bearbeiten',element)" matTooltip="Click to Edit"
+                <button mat-icon-button (click)="openDialog(operations.UPDATE,element)" matTooltip="Click to Edit"
                     class="iconbutton" color="primary">
                     <mat-icon aria-label="Edit">edit</mat-icon>
                 </button>
-                <button mat-icon-button (click)="openDialog('löschen',element)" matTooltip="Click to Delete"
+                <button mat-icon-button (click)="openDialog(operations.DELETE,element)" matTooltip="Click to Delete"
                     class="iconbutton" color="warn">
                     <mat-icon aria-label="Delete">delete</mat-icon>
                 </button>
