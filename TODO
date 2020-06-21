@@ -7,4 +7,4 @@ Functionalities:
   ☐ Home component displaying something
 
 Bugs:
-  ☐ Navigating to admin component without authentication navigates to access denied page instead of login
+  ✔ Navigating to admin component without authentication navigates to access denied page instead of login @done(20-06-21 13:29)

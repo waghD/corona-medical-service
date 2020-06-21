@@ -5,10 +5,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { DeniedComponent } from './denied/denied.component';
+import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', component: AuthComponent },
-  { path: 'denied', component: DeniedComponent },
+  { path: 'denied', component: DeniedComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

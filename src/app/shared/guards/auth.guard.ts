@@ -3,7 +3,6 @@ import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  UrlTree,
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -23,8 +22,13 @@ export class AuthGuard implements CanActivate {
     console.log('AuthGuard');
     return this.auth.isLoggedIn().pipe(
       tap((loggedIn) => {
+        console.log('loggedIn: ', loggedIn);
         if (!loggedIn) {
-          this.auth.redirectUrl = state.url;
+          if (state.url.includes('denied')) {
+            this.auth.redirectUrl = '/administration';
+          } else {
+            this.auth.redirectUrl = state.url;
+          }
           this.router.navigateByUrl('/auth').catch((err) => console.error(err));
         }
       })
