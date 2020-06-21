@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { Shift } from 'src/app/shared/models/shift.model';
 import { Subscription } from 'rxjs';
+import { OperationTypes, DialogData } from '../operations';
 
 @Component({
   selector: 'app-doctor-admin',
@@ -13,6 +14,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./doctor-admin.component.css'],
 })
 export class DoctorAdminComponent implements OnInit, OnDestroy {
+  operations = OperationTypes;
+
   displayedColumns = ['id', 'name', 'surname', 'profession', 'actions'];
   doctors: Doctor[] = [];
   doctorsTableDataSource = new MatTableDataSource<Doctor>();
@@ -39,52 +42,43 @@ export class DoctorAdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(action, obj) {
-    obj.action = action;
+  openDialog(action: OperationTypes, doctor?: Doctor) {
+    const dialogData: DialogData<Doctor> = {
+      action,
+      data: doctor,
+    };
     const dialogRef = this.dialog.open(DialogBoxComponent, {
       width: '300px',
-      data: obj,
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event == 'neuer Arzt') {
-        this.addRowData(result.data);
-      } else if (result.event == 'bearbeiten') {
-        this.updateRowData(result.data);
-      } else if (result.event == 'löschen') {
-        this.deleteRowData(result.data);
-      } else if (result.event == 'neue Schicht') {
-        this.newShift(result.data);
+    dialogRef.afterClosed().subscribe((result: DialogData<Doctor | Shift>) => {
+      if (result.action === OperationTypes.CREATE) {
+        this.addRowData(result.data as Doctor);
+      } else if (result.action === OperationTypes.UPDATE) {
+        this.updateRowData(result.data as Doctor);
+      } else if (result.action === OperationTypes.DELETE) {
+        this.deleteRowData(result.data as Doctor);
+      } else if (result.action === OperationTypes.ADD) {
+        this.newShift(result.data as Shift);
       }
     });
   }
 
-  addRowData(row_obj) {
+  addRowData(doctor: Doctor) {
     console.log('add row');
-    console.log('row_obj: ', row_obj);
-    this.doctorAdminService.createDoc(row_obj).then(() => {});
+    console.log('row_obj: ', doctor);
+    this.doctorAdminService.createDoc(doctor).then(() => {});
   }
-  updateRowData(row_obj) {
+  updateRowData(doctor: Doctor) {
     console.log('update');
-    this.doctorAdminService.editDoc(row_obj.id, row_obj).then(() => {});
+    this.doctorAdminService.editDoc(doctor.id, doctor).then(() => {});
   }
-  deleteRowData(row_obj) {
-    this.doctorAdminService.deleteDoc(row_obj.id).then(() => {});
+  deleteRowData(doctor: Doctor) {
+    this.doctorAdminService.deleteDoc(doctor.id).then(() => {});
   }
 
-  newShift(row_obj) {
-    console.log('neue Schicht am: ', row_obj.Date);
-    console.log('neue Schicht von: ', row_obj.id);
-    const newShift = new Shift({
-      id: 'tempID',
-      from: row_obj.Date.toISOString(),
-      to: row_obj.Date.toISOString(),
-      cleaner: null,
-      doc: this.doctors.find((doc) => doc.id === row_obj.id).toDto(),
-      helper: null,
-      station: null,
-    });
-
-    this.doctorAdminService.createShift(newShift).then(() => {});
+  newShift(shift: Shift) {
+    this.doctorAdminService.createShift(shift).then(() => {});
   }
 }

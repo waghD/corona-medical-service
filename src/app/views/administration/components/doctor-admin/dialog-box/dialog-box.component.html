@@ -1,53 +1,62 @@
 <!-- dialog-box.component.html -->
-<h1 mat-dialog-title><strong>{{action}}</strong></h1>
+<h1 mat-dialog-title><strong>{{actionTitle}}</strong></h1>
 <div mat-dialog-content>
-  <div form_bearbeiten *ngIf="action == 'neuer Arzt'">
-  <mat-form-field>
-    <input placeholder="Name" matInput [(ngModel)]="local_data.name">
-  </mat-form-field>
-  <mat-form-field>
-    <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
-  </mat-form-field>
-  <mat-form-field>
-    <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
-  </mat-form-field>
-  </div>
-
-  <div form_bearbeiten *ngIf="action == 'bearbeiten'">
+  <div form_bearbeiten *ngIf="action === operations.CREATE">
     <mat-form-field>
-      <input placeholder="Name" matInput [(ngModel)]="local_data.name">
+      <input placeholder="Name" matInput [(ngModel)]="doctor.name">
     </mat-form-field>
     <mat-form-field>
-      <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
+      <input placeholder="Nachname" matInput [(ngModel)]="doctor.surname">
     </mat-form-field>
     <mat-form-field>
-      <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
+      <input placeholder="Fachbereich" matInput [(ngModel)]="doctor.profession">
     </mat-form-field>
   </div>
 
+  <div form_bearbeiten *ngIf="action === operations.UPDATE">
+    <mat-form-field>
+      <input placeholder="Name" matInput [(ngModel)]="doctor.name">
+    </mat-form-field>
+    <mat-form-field>
+      <input placeholder="Nachname" matInput [(ngModel)]="doctor.surname">
+    </mat-form-field>
+    <mat-form-field>
+      <input placeholder="Fachbereich" matInput [(ngModel)]="doctor.profession">
+    </mat-form-field>
+  </div>
 
-<div form_delete *ngIf="action == 'löschen'">
-    Sicher, dass Sie <b>{{local_data.name}} {{local_data.surname}} ID: {{local_data.id}} </b> löschen wollen?
+
+  <div form_delete *ngIf="action === operations.DELETE">
+    Sicher, dass Sie <br /><b>{{doctor.name}} {{doctor.surname}} <br />ID: {{doctor.id}} </b> <br />löschen wollen?
   </div>
 </div>
 
-<div form_bearbeiten *ngIf="action == 'neue Schicht'">
+<div form_bearbeiten *ngIf="action === operations.ADD">
   <mat-form-field>
-    <input placeholder="Name" matInput [(ngModel)]="local_data.name">
+    <input placeholder="Name" matInput [(ngModel)]="doctor.name">
   </mat-form-field>
   <mat-form-field>
-    <input placeholder="Nachname" matInput [(ngModel)]="local_data.surname">
+    <input placeholder="Nachname" matInput [(ngModel)]="doctor.surname">
   </mat-form-field>
   <mat-form-field>
-    <input placeholder="Fachbereich" matInput [(ngModel)]="local_data.profession">
+    <input placeholder="Fachbereich" matInput [(ngModel)]="doctor.profession">
   </mat-form-field>
 
   <mat-form-field>
-    <input placeholder="Tag wählen"  matInput [matDatepicker]="Datepicker" matInput [(ngModel)]="local_data.Date">
+    <input placeholder="Tag wählen" matInput [matDatepicker]="Datepicker" matInput [(ngModel)]="dateSelection">
     <mat-datepicker-toggle matSuffix [for]="Datepicker"></mat-datepicker-toggle>
     <mat-datepicker #Datepicker></mat-datepicker>
   </mat-form-field>
- 
+
+  <mat-form-field>
+    <mat-label>Station</mat-label>
+    <mat-select [(ngModel)]="selectedStation">
+      <mat-option *ngFor="let station of stations | async" [value]="station.id">
+        {{station.station}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
 </div>
 
 
