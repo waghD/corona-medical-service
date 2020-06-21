@@ -6,6 +6,7 @@ enum AdminComponentTypes {
   HELPER,
   CLEANER,
   PATIENT,
+  STATION,
 }
 
 @Component({

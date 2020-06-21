@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ApiConnectionService } from './api-connection.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class AuthService {
     private auth: AngularFireAuth,
     private apiData: ApiConnectionService
   ) {
-    this.auth.setPersistence('local');
+    // Persist auth state during development
+    this.auth.setPersistence(environment.production ? 'none' : 'local');
   }
 
   public isLoggedIn(): Observable<boolean> {

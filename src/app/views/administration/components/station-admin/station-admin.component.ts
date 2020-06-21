@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class StationAdminComponent implements OnInit {
   // Hack to get Enum in HTML Template
   operations = OperationTypes;
-  displayedColumns = ['id', 'name', 'surname', 'station', 'actions'];
+  displayedColumns = ['id', 'station', 'actions'];
   stations: Station[] = [];
   patientsTableDataSource = new MatTableDataSource<Station>();
 
