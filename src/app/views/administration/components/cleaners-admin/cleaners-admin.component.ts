@@ -7,6 +7,7 @@ import { CleanerDialogBoxComponent } from './dialog-box/cleaner-dialog-box.compo
 import { Shift } from 'src/app/shared/models/shift.model';
 import { Cleaner } from 'src/app/shared/models/cleaner.model';
 import { Subscription } from 'rxjs';
+import { OperationTypes, DialogData } from '../operations';
 
 @Component({
   selector: 'app-cleaners-admin',
@@ -14,6 +15,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./cleaners-admin.component.css'],
 })
 export class CleanersAdminComponent implements OnInit, OnDestroy {
+  operations = OperationTypes;
+
   displayedColumns = ['id', 'name', 'surname', 'actions'];
   cleaners: Cleaner[];
   cleanersTableDataSource = new MatTableDataSource<Cleaner>();
@@ -40,53 +43,42 @@ export class CleanersAdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(action, obj) {
-    obj.action = action;
+  openDialog(action: OperationTypes, cleaner?: Cleaner) {
+    const dialogData: DialogData<Cleaner> = {
+      action,
+      data: cleaner,
+    };
     const dialogRef = this.dialog.open(CleanerDialogBoxComponent, {
       width: '300px',
-      data: obj,
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event == 'neue Reinigung') {
-        this.addRowData(result.data);
-      } else if (result.event == 'bearbeiten') {
-        this.updateRowData(result.data);
-      } else if (result.event == 'löschen') {
-        this.deleteRowData(result.data);
-      } else if (result.event == 'neue Schicht') {
-        this.newShift(result.data);
+    dialogRef.afterClosed().subscribe((result: DialogData<Cleaner | Shift>) => {
+      if (result.action === OperationTypes.CREATE) {
+        this.addRowData(result.data as Cleaner);
+      } else if (result.action === OperationTypes.UPDATE) {
+        this.updateRowData(result.data as Cleaner);
+      } else if (result.action === OperationTypes.DELETE) {
+        this.deleteRowData(result.data as Cleaner);
+      } else if (result.action === OperationTypes.ADD) {
+        this.newShift(result.data as Shift);
       }
     });
   }
 
-  addRowData(row_obj) {
+  addRowData(helper: Cleaner) {
     console.log('add row');
-    this.cleanerAdminService.createCleaner(row_obj).then(() => {});
+    this.cleanerAdminService.createCleaner(helper).then(() => {});
   }
-  updateRowData(row_obj) {
+  updateRowData(helper: Cleaner) {
     console.log('update');
-    this.cleanerAdminService.editCleaner(row_obj.id, row_obj).then(() => {});
+    this.cleanerAdminService.editCleaner(helper.id, helper).then(() => {});
   }
-  deleteRowData(row_obj) {
-    this.cleanerAdminService.deleteCleaner(row_obj.id).then(() => {});
+  deleteRowData(helper: Cleaner) {
+    this.cleanerAdminService.deleteCleaner(helper.id).then(() => {});
   }
 
-  newShift(row_obj) {
-    console.log('neue Schicht am: ', row_obj.Date);
-    console.log('neue Schicht von: ', row_obj.id);
-    const newShift = new Shift({
-      id: 'tempID',
-      from: row_obj.Date.toISOString(),
-      to: row_obj.Date.toISOString(),
-      cleaner: this.cleaners
-        .find((cleaner) => cleaner.id === row_obj.id)
-        .toDto(),
-      doc: null,
-      helper: null,
-      station: null,
-    });
-
-    this.cleanerAdminService.createShift(newShift).then(() => {});
+  newShift(shift: Shift) {
+    this.cleanerAdminService.createShift(shift).then(() => {});
   }
 }

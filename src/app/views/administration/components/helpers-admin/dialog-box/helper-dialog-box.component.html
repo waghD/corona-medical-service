@@ -27,10 +27,10 @@
 
 <div form_bearbeiten *ngIf="action === operations.ADD">
   <mat-form-field>
-    <input placeholder="Name" matInput [(ngModel)]="helper.name">
+    <input placeholder="Name" matInput [(ngModel)]="helper.name" disabled>
   </mat-form-field>
   <mat-form-field>
-    <input placeholder="Nachname" matInput [(ngModel)]="helper.surname">
+    <input placeholder="Nachname" matInput [(ngModel)]="helper.surname" disabled>
   </mat-form-field>
 
   <mat-form-field>

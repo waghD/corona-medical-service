@@ -33,10 +33,10 @@
 
 <div form_bearbeiten *ngIf="action === operations.ADD">
   <mat-form-field>
-    <input placeholder="Name" matInput [(ngModel)]="doctor.name">
+    <input placeholder="Name" matInput [(ngModel)]="doctor.name" disabled>
   </mat-form-field>
   <mat-form-field>
-    <input placeholder="Nachname" matInput [(ngModel)]="doctor.surname">
+    <input placeholder="Nachname" matInput [(ngModel)]="doctor.surname" disabled>
   </mat-form-field>
   <mat-form-field>
     <input placeholder="Fachbereich" matInput [(ngModel)]="doctor.profession">
