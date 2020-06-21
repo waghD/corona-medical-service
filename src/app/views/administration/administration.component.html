@@ -4,14 +4,14 @@
             <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.DOCTOR ? 'primary' : ''"
                     (click)="displayComponent = adminComponentTypes.DOCTOR">Ärztepersonal
                     verwalten</button></li>
-            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.PATIENT ? 'primary' : ''"
-                    (click)="displayComponent = adminComponentTypes.PATIENT">Patienten
-                    verwalten</button></li>
             <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.HELPER ? 'primary' : ''"
                     (click)="displayComponent = adminComponentTypes.HELPER">Pflegepersonal
                     verwalten</button></li>
             <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.CLEANER ? 'primary' : ''"
                     (click)="displayComponent = adminComponentTypes.CLEANER">Reinigungspersonal
+                    verwalten</button></li>
+            <li><button mat-flat-button [color]="displayComponent === adminComponentTypes.PATIENT ? 'primary' : ''"
+                    (click)="displayComponent = adminComponentTypes.PATIENT">Patienten
                     verwalten</button></li>
         </ul>
     </div>

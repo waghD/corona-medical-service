@@ -13,6 +13,8 @@ import { HelperDialogBoxComponent } from './components/helpers-admin/dialog-box/
 import { CleanerDialogBoxComponent } from './components/cleaners-admin/dialog-box/cleaner-dialog-box.component';
 import { DialogBoxComponent } from './components/doctor-admin/dialog-box/dialog-box.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StationAdminComponent } from './components/station-admin/station-admin.component';
+import { StationDialogComponent } from './components/station-admin/station-dialog/station-dialog.component';
 
 const routes: Routes = [{ path: '', component: AdministrationComponent }];
 
@@ -27,6 +29,8 @@ const routes: Routes = [{ path: '', component: AdministrationComponent }];
     HelperDialogBoxComponent,
     CleanersAdminComponent,
     CleanerDialogBoxComponent,
+    StationAdminComponent,
+    StationDialogComponent,
   ],
   imports: [
     CommonModule,

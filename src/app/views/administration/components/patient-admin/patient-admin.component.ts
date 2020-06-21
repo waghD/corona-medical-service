@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./patient-admin.component.css'],
 })
 export class PatientAdminComponent implements OnInit, OnDestroy {
-  displayedColumns = ['id', 'name', 'surname', 'actions'];
+  displayedColumns = ['id', 'name', 'surname', 'station', 'actions'];
   patients: Patient[] = [];
   patientsTableDataSource = new MatTableDataSource<Patient>();
 

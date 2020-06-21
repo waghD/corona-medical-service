@@ -6,6 +6,7 @@ import { Shift } from 'src/app/shared/models/shift.model';
 import { Cleaner } from 'src/app/shared/models/cleaner.model';
 import { Helper } from 'src/app/shared/models/helper.model';
 import { Patient } from 'src/app/shared/models/patient.model';
+import { Station } from 'src/app/shared/models/station.model';
 
 @Injectable()
 export class AdministrationService {
@@ -15,6 +16,9 @@ export class AdministrationService {
   );
   private helperStream: Subject<Helper[]> = new BehaviorSubject<Helper[]>([]);
   private patientStream: Subject<Patient[]> = new BehaviorSubject<Patient[]>(
+    []
+  );
+  private stationStream: Subject<Station[]> = new BehaviorSubject<Station[]>(
     []
   );
 
@@ -35,6 +39,9 @@ export class AdministrationService {
     this.apiConnection
       .getPatients()
       .subscribe((data) => this.patientStream.next(data));
+    this.apiConnection
+      .getStations()
+      .subscribe((data) => this.stationStream.next(data));
   }
 
   public getDoctors(): Observable<Doctor[]> {
@@ -53,6 +60,10 @@ export class AdministrationService {
     return this.patientStream.asObservable();
   }
 
+  public getStations(): Observable<Station[]> {
+    return this.stationStream.asObservable();
+  }
+
   public deleteDoc(id: string): Promise<void> {
     return this.apiConnection.deleteDoctor(id);
   }
@@ -67,6 +78,10 @@ export class AdministrationService {
 
   public deletePatient(id: string): Promise<void> {
     return this.apiConnection.deletePatient(id);
+  }
+
+  public deleteStation(id: string): Promise<void> {
+    return this.apiConnection.deleteStation(id);
   }
 
   public editDoc(id: string, doc: Doctor): Promise<void> {
@@ -94,6 +109,12 @@ export class AdministrationService {
     return this.apiConnection.editPatient(id, {
       name: patient.name,
       surname: patient.surname,
+    });
+  }
+
+  public editStation(id: string, station: Station): Promise<void> {
+    return this.apiConnection.editStation(id, {
+      station: station.station,
     });
   }
 
@@ -135,9 +156,12 @@ export class AdministrationService {
     return this.apiConnection.createPatient(newPatient);
   }
 
+  public createStation(station: Station): Promise<void> {
+    return this.apiConnection.createStation(station);
+  }
+
   public createShift(shift: Shift): Promise<void> {
     var toDate = new Date();
-
     toDate.setDate(shift.from.getDate() + 1);
     console.log('from: ', shift.from);
     console.log('toDate: ', toDate);

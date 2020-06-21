@@ -1,0 +1,26 @@
+<!-- dialog-box.component.html -->
+<h1 mat-dialog-title><strong>{{actionLabel}}</strong></h1>
+<div mat-dialog-content>
+    <div form_bearbeiten *ngIf="action == operations.CREATE">
+        <mat-form-field>
+            <input placeholder="Stationbezeichnung" matInput [(ngModel)]="stationName">
+        </mat-form-field>
+    </div>
+
+    <div form_bearbeiten *ngIf="action == operations.UPDATE">
+        <mat-form-field>
+            <input placeholder="NaStationbezeichnungme" matInput [(ngModel)]="stationName">
+        </mat-form-field>
+    </div>
+
+
+    <div form_delete *ngIf="action == operations.DELETE">
+        Sicher, dass Sie <b>{{station.station}} ID: {{station.id}} </b> löschen wollen?
+    </div>
+</div>
+
+
+<div mat-dialog-actions>
+    <button mat-button (click)="doAction()">bestätigen</button>
+    <button mat-button (click)="closeDialog()" mat-flat-button color="warn">abbrechen</button>
+</div>
