@@ -14,7 +14,7 @@ export class AuthService {
     private auth: AngularFireAuth,
     private apiData: ApiConnectionService
   ) {
-    this.auth.setPersistence('none');
+    this.auth.setPersistence('local');
   }
 
   public isLoggedIn(): Observable<boolean> {

@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./patient.component.css'],
 })
 export class PatientComponent implements OnInit, OnDestroy {
-  displayedColumns = ['id', 'name', 'surname'];
+  displayedColumns = ['id', 'name', 'surname', 'station'];
   patientsTableDataSource = new MatTableDataSource<Patient>();
 
   private dataSub: Subscription;
