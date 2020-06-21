@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +12,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ComponentsModule } from './shared/components/components.module';
+
+// localization
+
+import { registerLocaleData } from '@angular/common';
+import localeAT from '@angular/common/locales/de-AT';
+
+registerLocaleData(localeAT, 'de-AT');
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +37,7 @@ import { ComponentsModule } from './shared/components/components.module';
     AngularFireAuthModule,
     AngularFirestoreModule,
   ],
-  providers: [],
+  providers: [{ provide: LOCALE_ID, useValue: 'de-AT' }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
